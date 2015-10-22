@@ -1,4 +1,4 @@
-package Project1;
+package textDevicePackage;
 
 /*
 Copyright (c) 2010 McDowell
@@ -36,9 +36,7 @@ import java.io.PrintWriter;
 public final class TextDevices {
   private TextDevices() {}
 
-  private static TextDevice DEFAULT = (System.console() == null) ? streamDevice(
-      System.in, System.out)
-      : new ConsoleDevice(System.console());
+  private static TextDevice DEFAULT = (System.console() == null) ? streamDevice(System.in, System.out): new ConsoleDevice(System.console());
 
   /**
    * The default system text I/O device.

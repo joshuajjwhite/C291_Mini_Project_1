@@ -1,4 +1,4 @@
-package Project1;
+package textDevicePackage;
 
 /*
 Copyright (c) 2010 McDowell

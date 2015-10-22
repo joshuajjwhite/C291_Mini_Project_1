@@ -1,6 +1,8 @@
-package Project1;
+package project1;
 
 import java.util.Scanner;
+
+import textDevicePackage.TextDevice;
 
 public class UserConsoleInterface {
 	private final TextDevice io;
@@ -19,15 +21,15 @@ public class UserConsoleInterface {
 		String input = getInput().trim().toLowerCase();
 		
 			if(input.equals("register")){
-				System.out.println(register());
+				io.printf(register());
 			}
 			else if (input.equals("login")){
 				Boolean successlog = login();
 				if(successlog) {loggedIn();}
-				else{System.out.println("Invalid Username or Login");}
+				else{io.printf("Invalid Username or Login");}
 			}	
 			else if(input.equals("exit")){
-				System.out.println("exit");
+				io.printf("exit");
 			}
 			else{ 
 			}
@@ -68,9 +70,10 @@ public class UserConsoleInterface {
 	
 	public  String getInput(){
 		
-		Scanner scanner = new Scanner(System.in);
-		String input = scanner.next();
-		scanner.close();
+//		Scanner scanner = new Scanner(System.in);
+//		String input = scanner.next();
+//		scanner.close();
+		String input = io.readLine();
 			
 		return input;
 		

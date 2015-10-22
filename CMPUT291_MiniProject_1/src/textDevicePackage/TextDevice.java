@@ -1,5 +1,4 @@
-package Project1;
-
+package textDevicePackage;
 /*
 Copyright (c) 2010 McDowell
 
@@ -22,46 +21,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
  */
 
-import java.io.Console;
+
 import java.io.PrintWriter;
 import java.io.Reader;
 
 /**
- * {@link TextDevice} implementation wrapping a {@link Console}.
+ * Abstraction representing a text input/output device.
  * 
  * @author McDowell
  */
-class ConsoleDevice extends TextDevice {
-  private final Console console;
+public abstract class TextDevice {
+  public abstract TextDevice printf(String fmt, Object... params)
+      throws ConsoleException;
 
-  public ConsoleDevice(Console console) {
-    this.console = console;
-  }
+  public abstract String readLine() throws ConsoleException;
 
-  @Override
-  public TextDevice printf(String fmt, Object... params)
-      throws ConsoleException {
-    console.format(fmt, params);
-    return this;
-  }
+  public abstract char[] readPassword() throws ConsoleException;
 
-  @Override
-  public Reader reader() throws ConsoleException {
-    return console.reader();
-  }
+  public abstract Reader reader() throws ConsoleException;
 
-  @Override
-  public String readLine() throws ConsoleException {
-    return console.readLine();
-  }
-
-  @Override
-  public char[] readPassword() throws ConsoleException {
-    return console.readPassword();
-  }
-
-  @Override
-  public PrintWriter writer() throws ConsoleException {
-    return console.writer();
-  }
+  public abstract PrintWriter writer() throws ConsoleException;
 }
