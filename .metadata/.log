@@ -1,0 +1,91 @@
+!SESSION 2015-10-20 17:35:28.243 -----------------------------------------------
+eclipse.buildId=4.5.0.I20150603-2000
+java.version=1.7.0_79
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -data /cshome/jjwhite/workspace/C291_Mini_Project_1 -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.launchbar.core 2 0 2015-10-20 17:35:34.857
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.arduino.core.descriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2015-10-20 17:35:34.859
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.launchbar.core.descriptorType.default
+!SESSION 2015-10-20 17:41:58.659 -----------------------------------------------
+eclipse.buildId=4.5.0.I20150603-2000
+java.version=1.7.0_79
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -data /cshome/jjwhite/workspace/C291_Mini_Project_1 -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.launchbar.core 2 0 2015-10-20 17:42:05.277
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.arduino.core.descriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2015-10-20 17:42:05.279
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.launchbar.core.descriptorType.default
+!SESSION 2015-10-20 17:53:12.760 -----------------------------------------------
+eclipse.buildId=4.5.0.I20150603-2000
+java.version=1.7.0_79
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.launchbar.core 2 0 2015-10-20 17:53:19.773
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.arduino.core.descriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2015-10-20 17:53:19.775
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.launchbar.core.descriptorType.default
+!SESSION 2015-10-20 17:58:14.912 -----------------------------------------------
+eclipse.buildId=4.5.0.I20150603-2000
+java.version=1.7.0_79
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product /cshome/jjwhite/workspace/C291_Mini_Project_1/CMPUT291_MiniProject_1/src/Project1/Users.java
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product /cshome/jjwhite/workspace/C291_Mini_Project_1/CMPUT291_MiniProject_1/src/Project1/Users.java
+
+!ENTRY org.eclipse.launchbar.core 2 0 2015-10-20 17:58:23.394
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.arduino.core.descriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2015-10-20 17:58:23.396
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.launchbar.core.descriptorType.default
+!SESSION 2015-10-20 17:58:46.000 -----------------------------------------------
+eclipse.buildId=4.5.0.I20150603-2000
+java.version=1.7.0_79
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product /cshome/jjwhite/workspace/C291_Mini_Project_1/CMPUT291_MiniProject_1/src/Project1/Main.java
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product /cshome/jjwhite/workspace/C291_Mini_Project_1/CMPUT291_MiniProject_1/src/Project1/Main.java
+
+!ENTRY org.eclipse.launchbar.core 2 0 2015-10-20 17:58:52.904
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.arduino.core.descriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2015-10-20 17:58:52.909
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.launchbar.core.descriptorType.default
+!SESSION 2015-10-20 18:00:44.338 -----------------------------------------------
+eclipse.buildId=4.5.0.I20150603-2000
+java.version=1.7.0_79
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product /cshome/jjwhite/Downloads/CreateToffees1.java
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product /cshome/jjwhite/Downloads/CreateToffees1.java
+
+!ENTRY org.eclipse.launchbar.core 2 0 2015-10-20 18:00:51.457
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.arduino.core.descriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2015-10-20 18:00:51.458
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.launchbar.core.descriptorType.default
+!SESSION 2015-10-22 14:27:03.893 -----------------------------------------------
+eclipse.buildId=4.5.0.I20150603-2000
+java.version=1.7.0_79
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.launchbar.core 2 0 2015-10-22 14:27:11.742
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.cdt.arduino.core.descriptorType
+
+!ENTRY org.eclipse.launchbar.core 2 0 2015-10-22 14:27:11.764
+!MESSAGE Enablement expression is missing for config provider for org.eclipse.launchbar.core.descriptorType.default
