@@ -1,4 +1,4 @@
-package Project1;
+package project1;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -12,10 +12,6 @@ import java.io.PrintWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.HashMap;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
 
 public class Users {
 	
@@ -55,11 +51,11 @@ private void loadFromFile() {
     try {
         Reader reader = new InputStreamReader(
         		new FileInputStream(FILENAME));
-        Gson gson = new GsonBuilder().create();
+//        Gson gson = new GsonBuilder().create();
         //Following line based on gson
-        Type Dicttype = new TypeToken<HashMap<String,String>>() {}.getType();
-        HashMap<String,String> dictionary  = gson.fromJson(reader, Dicttype);
-        setUserInfo(dictionary);
+//        Type Dicttype = new TypeToken<HashMap<String,String>>() {}.getType();
+//        HashMap<String,String> dictionary  = gson.fromJson(reader, Dicttype);
+//        setUserInfo(dictionary);
 
     } catch (FileNotFoundException e) {
         // TODO Auto-generated catch block
@@ -77,8 +73,8 @@ public void saveToFile(){
         Writer writer = new OutputStreamWriter(
         		new FileOutputStream(FILENAME));
     
-        Gson gson = new GsonBuilder().create();
-        gson.toJson(getUserInfo(), writer);
+//        Gson gson = new GsonBuilder().create();
+//        gson.toJson(getUserInfo(), writer);
         writer.flush();
         writer.close();
     } catch (FileNotFoundException e) {
