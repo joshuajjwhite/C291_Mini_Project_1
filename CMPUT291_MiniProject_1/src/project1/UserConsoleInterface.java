@@ -6,37 +6,39 @@ import textDevicePackage.TextDevice;
 
 public class UserConsoleInterface {
 	private final TextDevice io;
+	private JdbcSQL SqlDB;
 
-	public UserConsoleInterface(TextDevice io){
+	public UserConsoleInterface(TextDevice io, JdbcSQL SqlDB){
 	    this.io = io;
+	    this.SqlDB = SqlDB;
+		
+//		SqlDB.sendExampleCommands();
+
 	}
 	
 	public void greet(){
 		io.printf("Welcome to UA Travel.  What would you like to do? (Register/Login/Exit) %n");
-		menu();
+		String input = getInput().trim().toLowerCase();
+		selectMenuLoginOption(input);
 	}
 
-	public void menu(){
+	public void selectMenuLoginOption(String input){
 		
-		String input = getInput().trim().toLowerCase();
-		
-			if(input.equals("register")){
-				io.printf(register());
-			}
-			else if (input.equals("login")){
-				Boolean successlog = login();
-				if(successlog) {loggedIn();}
-				else{io.printf("Invalid Username or Login");}
-			}	
-			else if(input.equals("exit")){
-				io.printf("exit");
-			}
-			else{ 
-			}
-			
+		 switch (input) {
+	         case "register":
+	        	 register();
+	        	 break;
+	         case "login":
+	        	 login();
+	             break;
+	         case "exit":
+	        	 System.exit(0);
+	         default:
+	        	 break;
+		 }
 	}
 	
-	public  String register(){
+	public String register(){
 		
 		//Initialize user names and passwords
 		Users user = new Users();
@@ -52,7 +54,7 @@ public class UserConsoleInterface {
 		
 	}
 	
-	public  Boolean login(){
+	public Boolean login(){
 		
 		Users user = new Users();
 		
@@ -65,16 +67,11 @@ public class UserConsoleInterface {
 		
 	}
 	
-	public  void loggedIn(){}
+	public void loggedIn(){}
 	
 	
-	public  String getInput(){
-		
-//		Scanner scanner = new Scanner(System.in);
-//		String input = scanner.next();
-//		scanner.close();
-		String input = io.readLine();
-			
+	public String getInput(){
+		String input = io.readLine().trim().toLowerCase();;
 		return input;
 		
 	}
