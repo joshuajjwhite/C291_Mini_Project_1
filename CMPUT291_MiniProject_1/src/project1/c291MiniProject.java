@@ -11,7 +11,6 @@ public class c291MiniProject {
 		userConsole.greet();
 		
 		SqlDB.closeConnection();
-		
 
 	}
 
