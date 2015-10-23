@@ -24,8 +24,8 @@ public class JdbcSQL {
 			Class.forName(m_driverName);
 			
 		} catch(ClassNotFoundException e) {System.out.println("Could not load driver");}
-		try {
-			Connection m_con = DriverManager.getConnection(m_url, m_username, m_password);
+		try {			
+			m_con = DriverManager.getConnection(m_url, m_username, m_password);
 		} catch (Exception e){System.out.println(e);}
 		
 	}
@@ -36,7 +36,9 @@ public class JdbcSQL {
 		
 	public void closeConnection(){
 		try{
-			m_con.close();
+			if(!m_con.isClosed()){
+				m_con.close();
+			}
 		} catch (Exception e){ System.out.println(e);}
 	}
 	

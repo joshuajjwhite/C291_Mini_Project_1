@@ -4,13 +4,12 @@ import textDevicePackage.TextDevices;
 public class c291MiniProject {
 
 	public static void main(String[] args) {
+		SqlManager sqlManager = new SqlManager();
 		
-		JdbcSQL SqlDB = new JdbcSQL();
-		
-		UserConsoleInterface userConsole = new UserConsoleInterface(TextDevices.defaultTextDevice(), SqlDB);
+		UserConsoleInterface userConsole = new UserConsoleInterface(TextDevices.defaultTextDevice(), sqlManager);
 		userConsole.greet();
 		
-		SqlDB.closeConnection();
+//		SqlDB.closeConnection();
 
 	}
 
