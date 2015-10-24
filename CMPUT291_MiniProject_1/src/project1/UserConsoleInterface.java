@@ -24,6 +24,8 @@ public class UserConsoleInterface {
 	}
 	
 	public void greet(){
+		sqlManager.setup();
+		
 		selectMenuLoginOption();
 		mainCLI();
 	}

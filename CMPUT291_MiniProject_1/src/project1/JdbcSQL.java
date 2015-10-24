@@ -42,17 +42,30 @@ public class JdbcSQL {
 		} catch (Exception e){ System.out.println(e);}
 	}
 	
-	public ResultSet sendCommand(String sql){
+	public void sendCommand(String sql){
 		try{
 			Statement stmt = m_con.createStatement();
 			stmt.executeUpdate(sql);
-			ResultSet rs = stmt.executeQuery(sql);
-			return rs;
+
 		} catch (Exception e){
 			System.out.println(e);
 			System.out.println("Could not send commands to sql");
 		}
-		return null;
+	}
+	
+	public void executeQuery(String sql){
+		try{
+			Statement stmt = m_con.createStatement();
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			while(rs.next()){
+				System.out.println(rs.getString("title")+"," + rs.getInt("movie_number"));
+			}
+
+		} catch (Exception e){
+			System.out.println(e);
+			System.out.println("Could not send commands to sql");
+		}
 	}
 	
 	
