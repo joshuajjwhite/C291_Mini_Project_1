@@ -4,7 +4,7 @@ public class SqlManager {
 	JdbcSQL SqlDB;
 	
 	public SqlManager(){
-		JdbcSQL SqlDB = new JdbcSQL();
+		SqlDB = new JdbcSQL();
 	}
 	
 	public void closeConnection(){
