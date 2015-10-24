@@ -79,14 +79,18 @@ public class Queries {
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			throw new RuntimeException();
+			throw new RuntimeException("Not a valid date");
 		}
 		
 		int month = cal.get(Calendar.MONTH); 
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 		int year = cal.get(Calendar.YEAR);
+
+		String dep_date = Integer.toString(day) + "/" +
+							Integer.toString(month) + "/" +
+							Integer.toString(year);	//DD/MM/YYYY
 				
-				return "";
+				return getGoodFlights(dep_date, src, dst);
 		
 	}
 	
@@ -96,6 +100,23 @@ public class Queries {
 				+ "FROM airports"
 				+ "WHERE acode = '" + acode + "';";
 		
+	}
+
+	public static searchAcodeByCity(String city){
+
+		return "SELECT acode"
+				+ "FROM airports"
+				+ "WHERE city = '" + city + "';";
+
+	}
+
+	public static searchAcodeByName(String name){
+
+			return "SELECT acode"
+				+ "FROM airports"
+				+ "WHERE name = '" + name + "';";
+
+
 	}
 	
 	public static String searchCities(String city){
@@ -148,8 +169,99 @@ public class Queries {
 	  + "a1.tzone, fa.fare, fa.limit, fa.price having fa.limit-count(tno) > 0;";
 	  
 	}
-	
-	
-	
 
+	public static String  createGoodConnections(){
+
+		  return "drop table good_connections;" +
+ 				"create view good_connections(src,dst,dep_date,flightno1,flightno2, layover,price)"
+ 				"as select" +
+ 				"a1.src, a2.dst, a1.dep_date, a1.flightno, a2.flightno," + 
+ 				"a2.dep_time-a1.arr_time, min(a1.price+a2.price)" +
+  				"from available_flights a1, available_flights a2" +
+  				"where a1.dst=a2.src and a1.arr_time +1.5/24 <=a2.dep_time and a1.arr_time +5/24 >=a2.dep_time" +
+  				"group by a1.src, a2.dst, a1.dep_date, a1.flightno, a2.flightno, a2.dep_time, a1.arr_time;" ;
+
+	}
+
+	private String getGoodFlights(String dep_date, String src, String dst){
+
+
+		 /* DO NOT REMOVE! return "select flightno1, flightno2, layover, price" + 
+  					"from (" +
+  					"select flightno1, flightno2, layover, price, row_number() over (order by price asc) rn" + 
+  					"from" + 
+  						"(select flightno1, flightno2, layover, price" +
+  						"from good_connections" +
+  						"where to_char(dep_date,'DD/MM/YYYY')='" + 
+  						dep_date + 
+  						"' and src='" + src +
+  						"' and dst='" + dst + "'" +
+  						"union" +
+  						"select flightno flightno1, '' flightno2, 0 layover, price" +
+  						"from available_flights" +
+  						"where to_char(dep_date,'DD/MM/YYYY')='" +
+  						dep_date + 
+  						"' and src=' " + src + "'" +
+  						"and dst='" + dst + "'));"; */
+
+		return "select flightno, src, dst, dep_date, arr_time, stops, layover, price, seats" + 
+		  		"from (" +
+			  		"select flightno, src, dst, dep_date, arr_time, stops, layover, price, seats" + 
+			 		"from" + 
+			  			"(select af.flightno1 (flightno), af.src, af.dst, af.dep_date, af.arr_time, 1 stops, gc.layover, af.price, af.seats" +
+			  			"from good_connections gc, available_flights af" +
+			  			"where gc.flightno1 = af.flightno and to_char(gc.dep_date,'DD/MM/YYYY')='" + 
+			  			dep_date + 
+			  			"' and gc.src='" + src +
+			  			"' and gc.dst='" + dst + "'" +
+					"union" +
+						"(select af.flightno2 (flightno), af.src, af.dst, af.dep_date, af.arr_time, 1 stops, gc.layover, af.price, af.seats" +
+			  			"from good_connections gc, available_flights af" +
+			  			"where gc.flightno2 = af.flightno and to_char(gc.dep_date,'DD/MM/YYYY')='" + 
+			  			dep_date + 
+			  			"' and gc.src='" + src +
+			  			"' and gc.dst='" + dst + "'" +
+					"union" +
+			  			"select flightno, src, dst, dep_date, arr_time, 0 stops, 0 layover, price, seats" +
+			  			"from available_flights" +
+			  			"where to_char(dep_date,'DD/MM/YYYY')='" +
+			  			dep_date + 
+			  			"' and src=' " + src + "'" +
+			  			"and dst='" + dst + "'))" +
+				"SORT BY price;" ;
+	}
+
+
+	public static String checkPassengers(String email, String name){
+		//passengers(email, name, country) 
+		return "SELECT email, name" + 
+				"FROM passengers" +
+				"WHERE email = '" + email + "' and name = '" + name + "';"
+
+
+	}
+
+	public static String addPassenger(String email, String name, String country){
+
+		return "INSERT into passengers values(" +
+				email + " " name + " " + country + ");" ; 
+	}
+
+	public static String addBooking(String tno, String flightno, String fare, String dep_date, String seat){
+		//bookings(tno, flightno, fare, dep_date, seat)
+			return "INSERT into bookings values(" +
+				tno + " " flightno + " " + fare +
+				dep_date + " " seat + ");" ; 
+	}
+
+	public static String addTicket(String tno,String name,String email,String paid_price){
+		//tickets(tno, name, email, paid_price)
+			return "INSERT into tickets values(" +
+				tno + " " name + " " + email + paid_price ");" ; 
+	}
+
+
+	
+	
+	
 }
