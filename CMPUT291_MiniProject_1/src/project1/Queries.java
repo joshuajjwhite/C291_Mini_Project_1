@@ -8,64 +8,66 @@ import java.util.Calendar;
 
 public class Queries {
 
-	public static String dropTables(){
+	public static String[] dropTables(){
 		
-		return "drop table bookings;" +
-		  "drop table tickets;" +
-		  "drop table passengers;" +
-		  "drop table flight_fares;" +
-		  "drop table fares;" +
-		  "drop table sch_flights;" +
-		  "drop table flights;" +
-		  "drop table airports;" +
-		  "drop view good_connections;" +
-		  "drop view available_flights;"
-		  + "commit;" ;
+		 String drop[] =  {"drop table bookings",
+		  "drop table tickets",
+		  "drop table passengers",
+		  "drop table flight_fares",
+		  "drop table fares",
+		  "drop table sch_flights",
+		  "drop table flights",
+		  "drop table airports",
+		  "drop view good_connections",
+		  "drop view available_flights"} ;
+		 
+		 return drop;
 	}
 	
-	public static String createTables(){
+	public static String[] createTables(){
 		
-		return "create table airports (" +
+		 String tables[] = {"create table airports (" +
 				  "acode		char(3)," +
 				  "name		char(30)," +
 				  "city		char(15)," +
 				  "country	char(15)," +
 				  "tzone		int," +
-				  "primary key (acode) );" +
+				  "primary key (acode) )",
 				  
 				"create table flights (flightno	char(6), src char(3), dst char(3), dep_time	date, est_dur int,"
 				  + "primary key (flightno), foreign key (src) references airports,"
-				  + "foreign key (dst) references airports);"
+				  + "foreign key (dst) references airports)",
 				  
-				+ "create table sch_flights (flightno	char(6), dep_date	date, act_dep_time	date, act_arr_time	date,"
-				+ "primary key (flightno,dep_date), foreign key (flightno) references flights on delete cascade);"
+				"create table sch_flights (flightno	char(6), dep_date	date, act_dep_time	date, act_arr_time	date,"
+				+ "primary key (flightno,dep_date), foreign key (flightno) references flights on delete cascade)",
 				
-				+ "create table fares (fare		char(2), descr		char(15), primary key (fare));"
+				"create table fares (fare		char(2), descr		char(15), primary key (fare))",
 				
-				+ "create table flight_fares (flightno	char(6), fare		char(2), limit		int,"
+				 "create table flight_fares (flightno	char(6), fare		char(2), limit		int,"
 				+ "price		float, bag_allow	int, primary key (flightno,fare),"
-				+ "foreign key (flightno) references flights, foreign key (fare) references fares);"
+				+ "foreign key (flightno) references flights, foreign key (fare) references fares)",
 				
-				+ "create table passengers (email		char(20), name		char(20), country	char(10),"
-				+ "primary key (email, name));"
+				 "create table passengers (email		char(20), name		char(20), country	char(10),"
+				+ "primary key (email, name))",
 				
-				+"create table tickets (tno		int, name char(20) email		char(20), paid_price	float, primary key (tno),"
-				+ "foreign key (email) references passengers);"
+				"create table tickets (tno		int, name char(20) email		char(20), paid_price	float, primary key (tno),"
+				+ "foreign key (email) references passengers)",
 				
-				+ "create table bookings (tno		int, flightno	char(6), fare		char(2), dep_date	date,"
+				"create table bookings (tno		int, flightno	char(6), fare		char(2), dep_date	date,"
 				+ "seat		char(3), primary key (tno,flightno,dep_date), foreign key (tno) references tickets,"
-				+ "foreign key (flightno,dep_date) references sch_flights,foreign key (fare) references fares);"
+				+ "foreign key (flightno,dep_date) references sch_flights,foreign key (fare) references fares)",
 				
-				+ "create table users (email char(20), pass char(30), last_login date, "
+				"create table users (email char(20), pass char(30), last_login date, "
 				+ "primary key (email),"
-				+ "foreign key (email) references passengers);"
+				+ "foreign key (email) references passengers)",
 				
-				+ "create table airline_agents(email char(20), name char(20),"
+				"create table airline_agents(email char(20), name char(20),"
 				+ "primary key (email), "
 				+ "foreign key (email) references passengers,"
-				+ "foreign key (name) references passengers);"
-				+ "commit;";
-	}
+				+ "foreign key (name) references passengers)"};
+		 
+		 return tables;
+		}
 	
 	public static String searchFlight(String src, String dst, String dep_date){
 		
@@ -151,7 +153,14 @@ public class Queries {
 		
 	}
 	
-	public static String createAvailableFlights(){
+	//existing bookings
+	
+	//delete booking
+	
+	//check available flights
+	
+	
+	public static String createAvailableFlights2(){
 	
 	return	"drop table available_flights;" +
 	
@@ -232,32 +241,66 @@ public class Queries {
 	}
 
 
-	public static String checkPassengers(String email, String name){
+	public static String[] checkPassengers(String email, String name){
 		//passengers(email, name, country) 
-		return "SELECT email, name" + 
+		 String checkpassengers[] = { "SELECT email, name" + 
 				"FROM passengers" +
-				"WHERE email = '" + email + "' and name = '" + name + "';" ;
+				"WHERE email = '" + email + "' and name = '" + name + "'"};
 
+		 return checkpassengers;
 
 	}
 
-	public static String addPassenger(String email, String name, String country){
+	public static String[] addPassenger(String email, String name, String country){
 
-		return "INSERT into passengers values(" +
-				email + " " + name + " " + country + ");" ; 
+		String addpassenger[] = {"INSERT into passengers values(," +
+				email + "', '" + name + "', '" + country + "')"} ;
+		
+		return addpassenger;
 	}
 
-	public static String addBooking(String tno, String flightno, String fare, String dep_date, String seat){
+	public static String[] addBooking(String tno, String flightno, String fare, String dep_date, String seat){
 		//bookings(tno, flightno, fare, dep_date, seat)
-			return "INSERT into bookings values(" +
-				tno + " " + flightno + " " + fare +
-				dep_date + " " + seat + ");" ; 
+			String addbooking[] = { "INSERT into bookings values(" +
+				tno + ", " + flightno + ", '" + fare + "'," +
+				"to_date('" +dep_date+"', 'DD-Mon-YYYY')" + ", " + seat + ")"} ;
+			
+			return addbooking;
 	}
+	
+	//create check ticket
 
-	public static String addTicket(String tno,String name,String email,String paid_price){
+	public static String[] addTicket(String tno,String name,String email,String paid_price){
 		//tickets(tno, name, email, paid_price)
-			return "INSERT into tickets values(" +
-				tno + " " + name + " " + email + " " + paid_price + ");" ; 
-	}	
+			String addticket[] = {"INSERT into tickets values(" +
+				tno + ", '" + name + "', '" + email + "', " + paid_price + ")"} ; 
+			
+			return addticket;
+	}
+	
+	public static String[] findUser(String email){
+		String finduser[] = { "select * from users where email = '" + email + "'"};
+		return finduser;
+	}
+	
+	public static String[] insertUser(String email, String password){
+		String insertuser[] = {"insert into users values ('" + email + "', '" + password + "', SYSDATE)"};
+		return insertuser;
+	}
+	
+	public static String[] updateLastLogin(String email, String password){
+		String updatelastlog[] = {"UPDATE users" +
+									"SET last_login = SYSDATE" +
+									"WHERE email = '" + email + "' and pass = '" + password + "'"};
+		
+		return updatelastlog;
+		}	
+	
+	public static String[] findAgent(String email){
+		String findagent[] = {"SELECT *" +
+							"FROM airline_agents" +
+							"WHERE email = '" + email + "'"};
+		return findagent;
+		}
 	
 }
