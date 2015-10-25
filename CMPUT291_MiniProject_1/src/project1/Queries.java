@@ -490,7 +490,7 @@ public class Queries {
 
 	
 	//delete booking
-	public static void removeBooking(String tno){
+	public static String removeBooking(String tno){
 		//bookings(tno, flightno, fare, dep_date, seat)
 		//used to remove boookings from a flight
 		//remember that the tickets also has to be removed if a booking is deleted
@@ -500,7 +500,7 @@ public class Queries {
 	}
 
 	//Record flight departure
-	public static String recordDeparture(String flightno, String dep_date String time){ //time in 24h:min
+	public static String recordDeparture(String flightno, String dep_date, String time){ //time in 24h:min
 			
 		if(time == null){
 
@@ -512,7 +512,7 @@ public class Queries {
 		else{
 
 			return "UPDATE sch_flights " +
-				"SET act_dep_time = to_date('"  + time + "', 'hh24:mi') "
+				"SET act_dep_time = to_date('"  + time + "', 'hh24:mi') " +
 				"WHERE dep_date = '" + dep_date + "' and flightno = " + flightno;
 
 		}
@@ -520,7 +520,7 @@ public class Queries {
 
 
 	//reocrd flight arrival
-	public static String recordArrival(String flightno, String dep_date String time){ //time in 24h:min
+	public static String recordArrival(String flightno, String dep_date, String time){ //time in 24h:min
 			
 		if(time == null){
 
@@ -532,10 +532,11 @@ public class Queries {
 		else{
 
 			return "UPDATE sch_flights " +
-				"SET act_arr_time = to_date('"  + time + "', 'hh24:mi') "
+				"SET act_arr_time = to_date('"  + time + "', 'hh24:mi') " +
 				"WHERE dep_date = '" + dep_date + "' and flightno = " + flightno;
 
-		}	
+		}
+	}
 
 	
 }

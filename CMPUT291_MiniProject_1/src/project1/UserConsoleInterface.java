@@ -309,7 +309,7 @@ public class UserConsoleInterface {
 	
 	public void cancleBooking(String key){
 		io.printf("Canceling Booking %s %n", key);
-		sqlManager.cancleBooking(key);
+		sqlManager.cancelBooking(key);
 	}
 	
 	public void logout(){
