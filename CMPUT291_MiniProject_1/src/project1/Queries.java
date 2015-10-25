@@ -10,16 +10,18 @@ public class Queries {
 
 	public static String[] dropTables(){
 		
-		 String drop[] =  {"drop table bookings",
-		  "drop table tickets",
-		  "drop table passengers",
-		  "drop table flight_fares",
-		  "drop table fares",
-		  "drop table sch_flights",
-		  "drop table flights",
-		  "drop table airports",
-		  "drop view good_connections",
-		  "drop view available_flights"} ;
+		 String drop[] =  {"drop table airline_agents cascade constraints",
+		  "drop table users cascade constraints",
+		  "drop table bookings cascade constraints",
+		  "drop table tickets cascade constraints",
+		  "drop table passengers cascade constraints",
+		  "drop table flight_fares cascade constraints",
+		  "drop table fares cascade constraints",
+		  "drop table sch_flights cascade constraints",
+		  "drop table flights cascade constraints",
+		  "drop table airports cascade constraints",
+		  "drop view good_connections ",
+		  "drop view available_flights "} ;
 		 
 		 return drop;
 	}
@@ -167,7 +169,7 @@ public class Queries {
 	  + "select f.flightno, sf.dep_date, f.src, f.dst,"
 	  + " f.dep_time+(trunc(sf.dep_date)-trunc(f.dep_time)),"
 	  + "f.dep_time+(trunc(sf.dep_date)-trunc(f.dep_time))+(f.est_dur/60+a2.tzone-a1.tzone)/24, "
-	  + "fa.fare, fa.limit-count(tno), fa.price from flights f, "
+	  + "fa.fare, fa.limit-count(tno), fa.price FROM flights f, "
 	  + "flight_fares fa, sch_flights sf, bookings b, airports a1, airports a2 "
 	  + "where f.flightno=sf.flightno and f.flightno=fa.flightno and f.src=a1.acode and "
 	  + "f.dst=a2.acode and fa.flightno=b.flightno(+) and fa.fare=b.fare(+) and "
@@ -179,7 +181,7 @@ public class Queries {
 
 	public static String  createGoodConnections2(){
 
-		  return "drop table good_connections;" +
+		  return "drop view good_connections;" +
  				"create view good_connections(src,dst,dep_date,flightno1,flightno2, layover,price)" +
  				"as select" +
  				"a1.src, a2.dst, a1.dep_date, a1.flightno, a2.flightno," + 
@@ -190,7 +192,7 @@ public class Queries {
 
 	}
 
-	private static String getGoodFlights(String dep_date, String src, String dst){
+	private static String getGoodFlights2(String dep_date, String src, String dst, Boolean orderbystops){
 
 
 		 /* DO NOT REMOVE! return "select flightno1, flightno2, layover, price" + 
@@ -211,31 +213,31 @@ public class Queries {
   						"' and src=' " + src + "'" +
   						"and dst='" + dst + "'));"; */
 
-		return "select flightno, src, dst, dep_date, arr_time, stops, layover, price, seats" + 
+		String ggf = "select flightno1, flightno2, src, dst, dep_date, to_char(arr_time, 'HH2:MI') , stops, layover, price, seats" + 
 		  		"from (" +
-			  		"select flightno, src, dst, dep_date, arr_time, stops, layover, price, seats" + 
+			  		"select flightno1, flightno2, src, dst, dep_date, arr_time, stops, layover, price, seats" + 
 			 		"from" + 
-			  			"(select af.flightno1 (flightno), af.src, af.dst, af.dep_date, af.arr_time, 1 stops, gc.layover, af.price, af.seats" +
+			  			"(select gc.flightno1, gc.flightno2, gc.src, gc.dst, gc.dep_date, af.arr_time, 1 stops, gc.layover, af.price, af.seats" +
 			  			"from good_connections gc, available_flights af" +
-			  			"where gc.flightno1 = af.flightno and to_char(gc.dep_date,'DD/MM/YYYY')='" + 
-			  			dep_date + 
+			  			"where to_char(gc.dep_date,'DD-Mon-YYYY')= '" + dep_date + 
 			  			"' and gc.src='" + src +
 			  			"' and gc.dst='" + dst + "'" +
 					"union" +
-						"(select af.flightno2 (flightno), af.src, af.dst, af.dep_date, af.arr_time, 1 stops, gc.layover, af.price, af.seats" +
-			  			"from good_connections gc, available_flights af" +
-			  			"where gc.flightno2 = af.flightno and to_char(gc.dep_date,'DD/MM/YYYY')='" + 
-			  			dep_date + 
-			  			"' and gc.src='" + src +
-			  			"' and gc.dst='" + dst + "'" +
-					"union" +
-			  			"select flightno, src, dst, dep_date, arr_time, 0 stops, 0 layover, price, seats" +
+			  			"select flightno, '' flightno2, src, dst, dep_date, arr_time, 0 stops, 0 layover, price, seats" +
 			  			"from available_flights" +
-			  			"where to_char(dep_date,'DD/MM/YYYY')='" +
-			  			dep_date + 
-			  			"' and src=' " + src + "'" +
-			  			"and dst='" + dst + "'))" +
-				"SORT BY price;" ;
+			  			"where to_char(dep_date,'DD-Mon-YYYY')='" + dep_date + 
+			  			"' and src='" + src + "'" +
+			  			"and dst='" + dst + "'))";
+		
+		if(orderbystops){
+			ggf = ggf + "ORDER BY stops, price";
+		}
+		
+		else{ggf = ggf + "Order BY price";}
+		
+		
+		return ggf;
+		
 	}
 
 
