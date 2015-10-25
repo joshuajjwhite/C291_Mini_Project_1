@@ -244,19 +244,24 @@ public class Queries {
 		
 	}
 	
-	public static String searchFlight(String src, String dst, String indate, Boolean threeflights, Boolean orderbystops){
+	public static String[] searchFlight(String src, String dst, String indate, Boolean wantthreeflights, Boolean orderbystops){
 		
 			String dep_date = getDate(indate);
 			String availableflights[] = createAvailableFlights();
 			
-			if(threeflights){
-				String threeflights[] = {availableflights[0], availableflights[1], 
+			if(wantthreeflights){
+				String threeflights[] = {availableflights[0], availableflights[1], createGoodConnections3()[0],
+						createGoodConnections3()[1], getGoodFlights3(dep_date, src, dst, orderbystops)};
+				return threeflights;
 			}
-		
+			
+			else{String twoflights[] = {availableflights[0], availableflights[1], createGoodConnections2()[0],
+			
+				createGoodConnections2()[1], getGoodFlights2(dep_date, src, dst, orderbystops)};
+			
+				return twoflights;
+			}
 	
-				
-				return Queries.getGoodFlights(dep_date, src, dst);
-		
 	}
 	
 
@@ -336,24 +341,31 @@ public class Queries {
 	  + "f.dst=a2.acode and fa.flightno=b.flightno(+) and fa.fare=b.fare(+) and "
 	  + "sf.dep_date=b.dep_date(+) "
 	  + "group by f.flightno, sf.dep_date, f.src, f.dst, f.dep_time, f.est_dur,a2.tzone,"
-	  + "a1.tzone, fa.fare, fa.limit, fa.price having fa.limit-count(tno) > 0;"};
+	  + "a1.tzone, fa.fare, fa.limit, fa.price having fa.limit-count(tno) > 0"};
 	
 	return availableflights;
 	  
 	}
 
-	public static String  createGoodConnections2(){
+	public static String[]  createGoodConnections2(){
 
-		  return "drop view good_connections;" +
+		  String gc[] = { "drop view good_connections",
+				  
  				"create view good_connections(src,dst,dep_date,flightno1,flightno2, layover,price)" +
  				"as select" +
  				"a1.src, a2.dst, a1.dep_date, a1.flightno, a2.flightno," + 
  				"a2.dep_time-a1.arr_time, min(a1.price+a2.price)" +
   				"from available_flights a1, available_flights a2" +
   				"where a1.dst=a2.src and a1.arr_time +1.5/24 <=a2.dep_time and a1.arr_time +5/24 >=a2.dep_time" +
-  				"group by a1.src, a2.dst, a1.dep_date, a1.flightno, a2.flightno, a2.dep_time, a1.arr_time;" ;
+  				"group by a1.src, a2.dst, a1.dep_date, a1.flightno, a2.flightno, a2.dep_time, a1.arr_time"};
+		  
+		  return gc;
 
 	}
+	
+	private static String[]  createGoodConnections3(){return null;}
+	
+	private static String getGoodFlights3(String dep_date, String src, String dst, Boolean orderbystops){ return null;}
 
 	private static String getGoodFlights2(String dep_date, String src, String dst, Boolean orderbystops){
 
