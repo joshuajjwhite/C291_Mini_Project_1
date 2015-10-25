@@ -498,5 +498,44 @@ public class Queries {
 				"WHERE tno = " + tno;
 
 	}
+
+	//Record flight departure
+	public static String recordDeparture(String flightno, String dep_date String time){ //time in 24h:min
+			
+		if(time == null){
+
+		return "UPDATE sch_flights " +
+				"SET act_dep_time = SYSDATE "  +
+				"WHERE dep_date = '" + dep_date + "' and flightno = " + flightno;
+		}
+
+		else{
+
+			return "UPDATE sch_flights " +
+				"SET act_dep_time = to_date('"  + time + "', 'hh24:mi') "
+				"WHERE dep_date = '" + dep_date + "' and flightno = " + flightno;
+
+		}
+	}	
+
+
+	//reocrd flight arrival
+	public static String recordArrival(String flightno, String dep_date String time){ //time in 24h:min
+			
+		if(time == null){
+
+		return "UPDATE sch_flights " +
+				"SET act_arr_time = SYSDATE "  +
+				"WHERE dep_date = '" + dep_date + "' and flightno = " + flightno;
+		}
+
+		else{
+
+			return "UPDATE sch_flights " +
+				"SET act_arr_time = to_date('"  + time + "', 'hh24:mi') "
+				"WHERE dep_date = '" + dep_date + "' and flightno = " + flightno;
+
+		}	
+
 	
 }
