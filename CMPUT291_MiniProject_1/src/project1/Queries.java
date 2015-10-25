@@ -53,11 +53,11 @@ public class Queries {
 				+ "primary key (email, name))",
 				
 				"create table tickets (tno	int, name char(20), email	char(20), paid_price float, primary key (tno),"
-				+ "foreign key (email) references passengers)",
+				+ "foreign key (email,name) references passengers)",
 				
 				"create table bookings (tno		int, flightno	char(6), fare		char(2), dep_date	date,"
-				+ "seat		char(3), primary key (tno,flightno,dep_date), foreign key (tno) references tickets,"
-				+ "foreign key (flightno, dep_date) references sch_flights,foreign key (fare) references fares)",
+				+ "seat		char(3), primary key (tno, flightno, dep_date), foreign key (tno) references tickets,"
+				+ "foreign key (flightno, dep_date) references sch_flights, foreign key (fare) references fares)",
 				
 				"create table users (email char(20), pass char(4), last_login date, "
 				+ "primary key (email))",
@@ -70,7 +70,7 @@ public class Queries {
 	}
 	
 	
-	private String getDate(String indate){
+	private static String getDate(String indate){
 		
 	SimpleDateFormat df = new SimpleDateFormat();
 		
@@ -96,9 +96,14 @@ public class Queries {
 		
 	}
 	
-	public static String searchFlight(String src, String dst, String dep_date){
+	public static String searchFlight(String src, String dst, String indate, Boolean threeflights, Boolean orderbystops){
 		
-		
+			String dep_date = getDate(indate);
+			String availableflights[] = createAvailableFlights();
+			
+			if(threeflights){
+				String threeflights[] = {availableflights[0], availableflights[1], 
+			}
 		
 	
 				
@@ -139,7 +144,7 @@ public class Queries {
 	
 	
 	
-	private String getMonth(int mon){
+	private static String getMonth(int mon){
 		
 		switch(mon){
 		
@@ -168,9 +173,9 @@ public class Queries {
 	//check available flights
 	
 	
-	public static String createAvailableFlights(){
+	public static String[] createAvailableFlights(){
 	
-	return	"drop view available_flights" +
+	String availableflights[] = {	"drop view available_flights",
 	
 	  "create view available_flights(flightno, dep_date, src , dst, dep_time, arr_time, fare, seats,"
 	  + "price) as"
@@ -183,7 +188,9 @@ public class Queries {
 	  + "f.dst=a2.acode and fa.flightno=b.flightno(+) and fa.fare=b.fare(+) and "
 	  + "sf.dep_date=b.dep_date(+) "
 	  + "group by f.flightno, sf.dep_date, f.src, f.dst, f.dep_time, f.est_dur,a2.tzone,"
-	  + "a1.tzone, fa.fare, fa.limit, fa.price having fa.limit-count(tno) > 0;";
+	  + "a1.tzone, fa.fare, fa.limit, fa.price having fa.limit-count(tno) > 0;"};
+	
+	return availableflights;
 	  
 	}
 
@@ -296,17 +303,17 @@ public class Queries {
 	}
 	
 	public static String updateLastLogin(String email){
-		return "UPDATE users" +
-				"SET last_login = SYSDATE" +
+		return "UPDATE users " +
+				"SET last_login = SYSDATE "  +
 				"WHERE email = '" + email + "'";
 		
 		
 		}	
 	
 	public static String findAgent(String email){
-		return "SELECT *" +
-							"FROM airline_agents" +
-							"WHERE email = '" + email + "'";
+		return "SELECT * " +
+				"FROM airline_agents " +
+				"WHERE email = '" + email + "'";
 		
 		}
 	
