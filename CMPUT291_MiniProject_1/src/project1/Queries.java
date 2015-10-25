@@ -219,6 +219,7 @@ public class Queries {
 	
 	
 	private static String getDate(String indate){
+		//used to synthesize a date from user and output it in a way we can parse with
 		
 	SimpleDateFormat df = new SimpleDateFormat();
 		
@@ -245,6 +246,9 @@ public class Queries {
 	}
 	
 	public static String[] searchFlight(String src, String dst, String indate, Boolean wantthreeflights, Boolean orderbystops){
+		//Main function for searching for flights
+		//Use watthreeflights for a user who wants three connecting flights as well as two and direct
+		//use orderbystops to output a table sorted by stops (least to greatest) and then price secondary
 		
 			String dep_date = getDate(indate);
 			String availableflights[] = createAvailableFlights();
@@ -287,7 +291,7 @@ public class Queries {
 	}
 	
 	public static String searchCities(String city){
-		
+		//used to narrow down partial user input and will return less and less results as the user specifies input
 		return "SELECT DISTINCT city, name"
 				+ "FROM airports"
 				+ "WHERE city LIKE '%" + city + "%' OR name LIKE '%" + city + "%'";
@@ -319,7 +323,16 @@ public class Queries {
 		
 	}
 	
-	//existing bookings
+
+	public static String existingBookings(String tno, String flightno, String dep_date){
+		//Used for checking if a booking for a flight already esists
+		//Should return empty and then you can book a flight for the user
+		return "Select * " +
+				"From bookings "
+				"Where tno = " + tno + " and flightno = " + flightno + " and to_char(dep_date,'DD-Mon-YYYY') = " + dep_date; 
+
+
+	}
 	
 	//delete booking
 	
@@ -443,7 +456,13 @@ public class Queries {
 		
 	}
 	
-	//create check ticket
+	public static String checkTicket(String tno){
+		//used to see if the randomly generated ticketno is already  used.
+		//should return empty then the ticketno can be used
+		return "Select * " +
+				"From tickets " +
+				"Where tno = " + tno;
+	}
 
 	public static String addTicket(String tno,String name,String email,String paid_price){
 		//tickets(tno, name, email, paid_price)
