@@ -86,11 +86,11 @@ public class Queries {
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 		int year = cal.get(Calendar.YEAR);
 
-		String dep_date = Integer.toString(day) + "/" +
+		dep_date = Integer.toString(day) + "/" +
 							Integer.toString(month) + "/" +
 							Integer.toString(year);	//DD/MM/YYYY
 				
-				return getGoodFlights(dep_date, src, dst);
+				return Queries.getGoodFlights(dep_date, src, dst);
 		
 	}
 	
@@ -102,7 +102,7 @@ public class Queries {
 		
 	}
 
-	public static searchAcodeByCity(String city){
+	public static String searchAcodeByCity(String city){
 
 		return "SELECT acode"
 				+ "FROM airports"
@@ -110,7 +110,7 @@ public class Queries {
 
 	}
 
-	public static searchAcodeByName(String name){
+	public static String searchAcodeByName(String name){
 
 			return "SELECT acode"
 				+ "FROM airports"
@@ -173,7 +173,7 @@ public class Queries {
 	public static String  createGoodConnections(){
 
 		  return "drop table good_connections;" +
- 				"create view good_connections(src,dst,dep_date,flightno1,flightno2, layover,price)"
+ 				"create view good_connections(src,dst,dep_date,flightno1,flightno2, layover,price)" +
  				"as select" +
  				"a1.src, a2.dst, a1.dep_date, a1.flightno, a2.flightno," + 
  				"a2.dep_time-a1.arr_time, min(a1.price+a2.price)" +
@@ -183,7 +183,7 @@ public class Queries {
 
 	}
 
-	private String getGoodFlights(String dep_date, String src, String dst){
+	private static String getGoodFlights(String dep_date, String src, String dst){
 
 
 		 /* DO NOT REMOVE! return "select flightno1, flightno2, layover, price" + 
@@ -236,7 +236,7 @@ public class Queries {
 		//passengers(email, name, country) 
 		return "SELECT email, name" + 
 				"FROM passengers" +
-				"WHERE email = '" + email + "' and name = '" + name + "';"
+				"WHERE email = '" + email + "' and name = '" + name + "';" ;
 
 
 	}
@@ -244,20 +244,20 @@ public class Queries {
 	public static String addPassenger(String email, String name, String country){
 
 		return "INSERT into passengers values(" +
-				email + " " name + " " + country + ");" ; 
+				email + " " + name + " " + country + ");" ; 
 	}
 
 	public static String addBooking(String tno, String flightno, String fare, String dep_date, String seat){
 		//bookings(tno, flightno, fare, dep_date, seat)
 			return "INSERT into bookings values(" +
-				tno + " " flightno + " " + fare +
-				dep_date + " " seat + ");" ; 
+				tno + " " + flightno + " " + fare +
+				dep_date + " " + seat + ");" ; 
 	}
 
 	public static String addTicket(String tno,String name,String email,String paid_price){
 		//tickets(tno, name, email, paid_price)
 			return "INSERT into tickets values(" +
-				tno + " " name + " " + email + paid_price ");" ; 
+				tno + " " + name + " " + email + " " + paid_price + ");" ; 
 	}
 
 
