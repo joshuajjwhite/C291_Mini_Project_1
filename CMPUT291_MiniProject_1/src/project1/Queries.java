@@ -328,7 +328,7 @@ public class Queries {
 		//Used for checking if a booking for a flight already esists
 		//Should return empty and then you can book a flight for the user
 		return "Select * " +
-				"From bookings "
+				"From bookings " +
 				"Where tno = " + tno + " and flightno = " + flightno + " and to_char(dep_date,'DD-Mon-YYYY') = " + dep_date; 
 
 
