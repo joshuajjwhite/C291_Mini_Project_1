@@ -2,18 +2,21 @@ package project1;
 
 import java.sql.ResultSet;
 
+import textDevicePackage.TextDevice;
+
 public class SqlManager {
 	JdbcSQL sqlDB;
+	TextDevice io;
 	
-	public SqlManager(){
+	public SqlManager(TextDevice io){
 		sqlDB = new JdbcSQL();
-		
+		this.io = io;
 	}
 	
 	public ResultSet queryWrapper(String[] stmts){
 		ResultSet rs = null;
 		for(String i: stmts){
-			rs = sqlDB.executeQuery(i);
+			sqlDB.sendCommand(i);
 		}
 		return rs;
 	}
@@ -30,15 +33,24 @@ public class SqlManager {
 	
 	public boolean checkForAgentWithEmail(String email){
 		ResultSet rs = sqlDB.executeQuery(Queries.findAgent(email));
-		if(!rs.isBeforeFirst()){
-			return false;
+		try {
+			if(!rs.isBeforeFirst()){
+				return false;
+			}
+		} catch (Exception e){
+			io.printf("checkForAgentWithEmail failed %s", e);
 		}
 		return true;
 	}
 	
 	public String getUserPass(String email){
 		ResultSet rs = sqlDB.executeQuery(Queries.findUser(email));
-		String password = rs.getString("pass");
+		String password = "";
+		try {
+			rs.getString("pass");
+		} catch (Exception e){
+			io.printf("getUserPass failed %s", e);
+		}
 		return password;
 	}
 	
@@ -59,8 +71,12 @@ public class SqlManager {
 	
 	public boolean checkForUserWithEmail(String email){
 		ResultSet rs = sqlDB.executeQuery(Queries.findUser(email));
-		if(!rs.isBeforeFirst()){
-			return false;
+		try{
+			if(!rs.isBeforeFirst()){
+				return false;
+			}
+		} catch (Exception e){
+			io.printf("checkForUserWithEmail failed %s", e);
 		}
 		return true; 
 	}
