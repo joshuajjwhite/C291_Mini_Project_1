@@ -98,33 +98,32 @@ public class Queries {
 	
 
 
-	public static String[] searchAcodeByCity(String city){
+	public static String searchAcodeByCity(String city){
 
-		String search[] = { "SELECT acode"
+			return "SELECT acode"
 				+ "FROM airports"
-				+ "WHERE city = '" + city + "'"};
-				
-		return search;
+				+ "WHERE city = '" + city + "'";
+
 				
 
 	}
 
-	public static String[] searchAcodeByName(String name){
+	public static String searchAcodeByName(String name){
 
-		String search[] = {"SELECT acode" +
+		return "SELECT acode" +
 				 "FROM airports"
-				+ "WHERE name = '" + name + "'"};
-		return search;
+				+ "WHERE name = '" + name + "'";
+
 
 
 	}
 	
-	public static String[] searchCities(String city){
+	public static String searchCities(String city){
 		
-		String search[] = {"SELECT DISTINCT city, name"
+		return "SELECT DISTINCT city, name"
 				+ "FROM airports"
-				+ "WHERE city LIKE '%" + city + "%' OR name LIKE '%" + city + "%'"};
-		return search;
+				+ "WHERE city LIKE '%" + city + "%' OR name LIKE '%" + city + "%'";
+		
 	}
 	
 	
@@ -161,7 +160,7 @@ public class Queries {
 	
 	public static String createAvailableFlights(){
 	
-	return	"drop table available_flights;" +
+	return	"drop view available_flights" +
 	
 	  "create view available_flights(flightno, dep_date, src , dst, dep_time, arr_time, fare, seats,"
 	  + "price) as"
@@ -240,66 +239,65 @@ public class Queries {
 	}
 
 
-	public static String[] checkPassengers(String email, String name){
+	public static String checkPassengers(String email, String name){
 		//passengers(email, name, country) 
-		 String checkpassengers[] = { "SELECT email, name" + 
+		 return "SELECT email, name" + 
 				"FROM passengers" +
-				"WHERE email = '" + email + "' and name = '" + name + "'"};
+				"WHERE email = '" + email + "' and name = '" + name + "'";
 
-		 return checkpassengers;
-
-	}
-
-	public static String[] addPassenger(String email, String name, String country){
-
-		String addpassenger[] = {"INSERT into passengers values(," +
-				email + "', '" + name + "', '" + country + "')"} ;
 		
-		return addpassenger;
+
 	}
 
-	public static String[] addBooking(String tno, String flightno, String fare, String dep_date, String seat){
+	public static String addPassenger(String email, String name, String country){
+
+		return"INSERT into passengers values(," +
+				email + "', '" + name + "', '" + country + "')" ;
+		
+	
+	}
+
+	public static String addBooking(String tno, String flightno, String fare, String dep_date, String seat){
 		//bookings(tno, flightno, fare, dep_date, seat)
-			String addbooking[] = { "INSERT into bookings values(" +
+			return "INSERT into bookings values(" +
 				tno + ", " + flightno + ", '" + fare + "'," +
-				"to_date('" +dep_date+"', 'DD-Mon-YYYY')" + ", " + seat + ")"} ;
+				"to_date('" +dep_date+"', 'DD-Mon-YYYY')" + ", " + seat + ")" ;
 			
-			return addbooking;
+		
 	}
 	
 	//create check ticket
 
-	public static String[] addTicket(String tno,String name,String email,String paid_price){
+	public static String addTicket(String tno,String name,String email,String paid_price){
 		//tickets(tno, name, email, paid_price)
-			String addticket[] = {"INSERT into tickets values(" +
-				tno + ", '" + name + "', '" + email + "', " + paid_price + ")"} ; 
+			return "INSERT into tickets values(" +
+				tno + ", '" + name + "', '" + email + "', " + paid_price + ")" ; 
 			
-			return addticket;
 	}
 	
-	public static String[] findUser(String email){
-		String finduser[] = { "select * from users where email = '" + email + "'"};
-		return finduser;
-	}
-	
-	public static String[] insertUser(String email, String password){
-		String insertuser[] = {"insert into users values ('" + email + "', '" + password + "', SYSDATE)"};
-		return insertuser;
-	}
-	
-	public static String[] updateLastLogin(String email, String password){
-		String updatelastlog[] = {"UPDATE users" +
-									"SET last_login = SYSDATE" +
-									"WHERE email = '" + email + "' and pass = '" + password + "'"};
+	public static String findUser(String email){
+		return "select * from users where email = '" + email + "'";
 		
-		return updatelastlog;
+	}
+	
+	public static String insertUser(String email, String password){
+		return "insert into users values ('" + email + "', '" + password + "', SYSDATE)";
+		
+	}
+	
+	public static String updateLastLogin(String email){
+		return "UPDATE users" +
+				"SET last_login = SYSDATE" +
+				"WHERE email = '" + email + "'";
+		
+		
 		}	
 	
-	public static String[] findAgent(String email){
-		String findagent[] = {"SELECT *" +
+	public static String findAgent(String email){
+		return "SELECT *" +
 							"FROM airline_agents" +
-							"WHERE email = '" + email + "'"};
-		return findagent;
+							"WHERE email = '" + email + "'";
+		
 		}
 
 	
