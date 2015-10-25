@@ -46,17 +46,20 @@ public class UserConsoleInterface {
 		boolean loop;
 		do {
 			loop = false;
-			io.printf("Welcome to UA Travel.  What would you like to do? (Register/Login/Exit) %n");
+			io.printf("Welcome to UA Travel.  What would you like to do? (Register(R)/Login(L)/Exit(E)) %n");
 			String input = getInput().trim().toLowerCase();
 			
 			 switch (input) {
+			 	 case "r":
 		         case "register":
 		        	 register();
 		        	 loop = true;
 		        	 break;
+		         case "l":
 		         case "login":
 		        	 loop = !login();
 		             break;
+		         case "e":
 		         case "exit":
 		        	 exitProgram();
 		         default:
@@ -65,6 +68,17 @@ public class UserConsoleInterface {
 		        	 break;
 			 }
 			} while(loop);
+	}
+	
+	public String getInput(){
+		String input = io.readLine().trim().toLowerCase();;
+		return input;
+	}
+	
+	private void exitProgram(){
+		io.printf("Exiting System %n");
+		sqlManager.closeConnection();
+		System.exit(0);
 	}
 	
 	public void register(){
@@ -209,16 +223,6 @@ public class UserConsoleInterface {
 	public void recordAnArrival(){
 		io.printf("Record an Arrival %n");
 	}
-	
-	public String getInput(){
-		String input = io.readLine().trim().toLowerCase();;
-		return input;
-	}
-	
-	private void exitProgram(){
-		io.printf("Exiting System %n");
-		sqlManager.closeConnection();
-		System.exit(0);
-	}
+
 	
 }
