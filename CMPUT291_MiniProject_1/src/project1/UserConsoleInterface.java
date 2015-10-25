@@ -282,7 +282,7 @@ public class UserConsoleInterface {
 		while(loop){
 			io.printf("Selected Booking with tno %s%n", key);
 			io.printf("###############################%n");
-			io.printf("Info: %s", value);
+			io.printf("Info: %s%n", value);
 			
 			io.printf("Type \"D\" to delete Booking %n"
 					 + "B. Back %n"
