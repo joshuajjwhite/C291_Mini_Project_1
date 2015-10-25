@@ -35,6 +35,12 @@ public class UserConsoleInterface {
 
 	}
 	
+	public void clearConsole(){
+		for(int i = 0; i <50; i++){
+			io.printf("%n");
+		}
+	}
+	
 	public void greet(){
 		sqlManager.setup();
 		
@@ -46,6 +52,7 @@ public class UserConsoleInterface {
 		boolean loop;
 		do {
 			loop = false;
+			clearConsole();
 			io.printf("Welcome to UA Travel.  What would you like to do? (Register(R)/Login(L)/Exit(E)) %n");
 			String input = getInput().trim().toLowerCase();
 			
@@ -150,39 +157,34 @@ public class UserConsoleInterface {
 	public void mainCLI(){
 		boolean loop = true;
 		while(loop) {
-			io.printf("1. Search for flight %n"
-			 		 + "2. Make a booking %n"
-					 + "3. List existing bookings %n"
-			 		 + "4. Cancle a booking %n"
-					 + "5. Logout %n");
+			clearConsole();
+			io.printf("Airport Main Menu %n");
+			io.printf("################# %n");
+			io.printf("1. Search for flight (& Make Booking) %n"
+					 + "2. List existing bookings (& Cancel Booking) %n"
+			 		 + "3. Logout %n");
 			if (getCurrentUserType().equals("agent")){
-				 io.printf("6. Record flight departure %n"
-						 + "7. Record flight arrival %n");
+				 io.printf("4. Record flight departure %n"
+						 + "5. Record flight arrival %n");
 			}
 			 
 			String input = getInput().trim().toLowerCase();
 			switch (input){
 				case "1":
-					searchForFlight();
+					searchForFlightMenu();
 					break;
 				case "2":
-					 makeBooking();
+					listBookings();
 					 break;
 				 case "3":
-					 listBookings();
-					 break;
-				 case "4":
-					 cancleBooking();
-					 break;
-				 case "5":
 					 logout();
 					 break;
-				 case "6":
+				 case "4":
 					 if(getCurrentUserType().equals("agent")){
 						 recordADeparture();
 					 }
 					 break;
-				 case "7":
+				 case "5":
 					 if(getCurrentUserType().equals("agent")){
 						 recordAnArrival();
 					 }
@@ -194,8 +196,39 @@ public class UserConsoleInterface {
 		}
 	}
 	
+	public void searchForFlightMenu(){
+		boolean loop = true;
+		while(loop) {
+			clearConsole();
+			io.printf("Search For A Flight Menu %n");
+			io.printf("######################## %n");
+			io.printf("1. Enter Search %n"
+					 + "2. Back %n"
+					 + "3. Logout %n");
+			 
+			String input = getInput().trim().toLowerCase();
+			switch (input){
+				case "1":
+					searchForFlight();
+					break;
+				case "2":
+					 loop = false;
+					 break;
+				case "3":
+					 logout();
+					 break;
+				 default:
+					 io.printf("Invalid Input %n %n");
+					 break;				
+			}
+		}
+		
+		
+		
+	}
+	
 	public void searchForFlight(){
-		io.printf("Search For A Flight %n");
+		io.printf("Search For A Flight DD-Mon-YYYY %n");
 	}
 	
 	public void makeBooking(){
@@ -204,6 +237,38 @@ public class UserConsoleInterface {
 	
 	public void listBookings(){
 		io.printf("List Bookings %n");
+		
+		boolean loop = true;
+		while(loop) {
+			clearConsole();
+			io.printf("Listed Bookings %n");
+			io.printf("############### %n");
+			
+			//content
+			int counter = 1;
+			
+			
+			
+			io.printf("Type \"cancel #\" to Cancel Booking %n"
+					 + "2. Back %n"
+					 + "3. Logout %n");
+			 
+			String input = getInput().trim().toLowerCase();
+			switch (input){
+				case "1":
+					cancleBooking();
+					break;
+				case "2":
+					 loop = false;
+					 break;
+				case "3":
+					 logout();
+					 break;
+				 default:
+					 io.printf("Invalid Input %n %n");
+					 break;				
+			}
+		}
 	}
 	
 	public void cancleBooking(){

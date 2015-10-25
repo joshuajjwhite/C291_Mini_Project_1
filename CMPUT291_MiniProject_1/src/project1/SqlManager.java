@@ -29,6 +29,7 @@ public class SqlManager {
 	public void setup(){
 //		this.dropTables();
 //		this.createTables();
+//		this.insertData();
 	}
 	
 	public boolean checkForAgentWithEmail(String email){
@@ -40,6 +41,7 @@ public class SqlManager {
 			return true;
 		} catch (Exception e){
 			io.printf("checkForAgentWithEmail failed %s %n", e);
+			return false;
 		}
 
 	}
@@ -69,6 +71,10 @@ public class SqlManager {
 	public void createTables(){
 		queryWrapper(Queries.createTables());
 
+	}
+	
+	public void insertData(){
+		queryWrapper(Queries.insertSampleData());
 	}
 	
 	public boolean checkForUserWithEmail(String email){
