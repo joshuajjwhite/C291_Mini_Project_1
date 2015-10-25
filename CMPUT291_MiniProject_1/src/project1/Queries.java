@@ -52,34 +52,31 @@ public class Queries {
 				 "create table passengers (email		char(20), name		char(20), country	char(10),"
 				+ "primary key (email, name))",
 				
-				"create table tickets (tno		int, name char(20) email		char(20), paid_price	float, primary key (tno),"
+				"create table tickets (tno	int, name char(20), email	char(20), paid_price float, primary key (tno),"
 				+ "foreign key (email) references passengers)",
 				
 				"create table bookings (tno		int, flightno	char(6), fare		char(2), dep_date	date,"
 				+ "seat		char(3), primary key (tno,flightno,dep_date), foreign key (tno) references tickets,"
-				+ "foreign key (flightno,dep_date) references sch_flights,foreign key (fare) references fares)",
+				+ "foreign key (flightno, dep_date) references sch_flights,foreign key (fare) references fares)",
 				
-				"create table users (email char(20), pass char(30), last_login date, "
-				+ "primary key (email),"
-				+ "foreign key (email) references passengers)",
+				"create table users (email char(20), pass char(4), last_login date, "
+				+ "primary key (email))",
 				
 				"create table airline_agents(email char(20), name char(20),"
 				+ "primary key (email), "
-				+ "foreign key (email) references passengers,"
-				+ "foreign key (name) references passengers)"};
+				+ "foreign key (email) references users)"};
 		 
 		 return tables;
-		}
+	}
 	
-	public static String searchFlight(String src, String dst, String dep_date){
+	
+	private String getDate(String indate){
 		
-		
-		
-		SimpleDateFormat df = new SimpleDateFormat();
+	SimpleDateFormat df = new SimpleDateFormat();
 		
 		Calendar cal = Calendar.getInstance();
 		try {
-			cal.setTime(df.parse(dep_date));
+			cal.setTime(df.parse(indate));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -90,9 +87,20 @@ public class Queries {
 		int day = cal.get(Calendar.DAY_OF_MONTH);
 		int year = cal.get(Calendar.YEAR);
 
-		dep_date = Integer.toString(day) + "/" +
-							Integer.toString(month) + "/" +
-							Integer.toString(year);	//DD/MM/YYYY
+		String date = Integer.toString(day) + "-" +
+							getMonth(month) + "-" +
+							Integer.toString(year);	//DD-Mon-YYYY
+		
+		return date;
+		
+		
+	}
+	
+	public static String searchFlight(String src, String dst, String dep_date){
+		
+		
+		
+	
 				
 				return Queries.getGoodFlights(dep_date, src, dst);
 		
