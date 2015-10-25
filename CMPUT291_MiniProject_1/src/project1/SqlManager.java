@@ -10,6 +10,15 @@ public class SqlManager {
 		
 	}
 	
+	public ResultSet queryWrapper(String[] stmts){
+		ResultSet rs = null;
+		for(String i: stmts){
+			rs = sqlDB.executeQuery(i);
+		}
+		return rs;
+	}
+	
+	
 	public void closeConnection(){
 		sqlDB.closeConnection();
 	}
@@ -17,8 +26,6 @@ public class SqlManager {
 	public void setup(){
 		this.dropTables();
 		this.createTables();
-		
-		
 	}
 	
 	public boolean checkForAgentWithEmail(String email){
@@ -37,22 +44,16 @@ public class SqlManager {
 	
 	
 	public void logoutUser(String email){
-		sqlDB.sendCommand(Queries.updateLastLogin());
+		sqlDB.sendCommand(Queries.updateLastLogin(email));
 	}
 	
 	
 	public void dropTables(){
-		String[] tables = Queries.dropTables();
-		for(String i: tables){
-			sqlDB.sendCommand(i);
-		}
+		queryWrapper(Queries.dropTables());
 	}
 	
 	public void createTables(){
-		String[] tables  = Queries.createTables();
-		for(String i: tables){
-			sqlDB.sendCommand(i);
-		}
+		queryWrapper(Queries.createTables());
 
 	}
 	
