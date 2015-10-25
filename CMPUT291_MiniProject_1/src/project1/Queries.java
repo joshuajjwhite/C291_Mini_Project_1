@@ -258,20 +258,6 @@ public class Queries {
 		//tickets(tno, name, email, paid_price)
 			return "INSERT into tickets values(" +
 				tno + " " + name + " " + email + " " + paid_price + ");" ; 
-	}
-	
-	public static String findUserByEmail(String email){
-		return "select * from users where email LIKE '" + email + "'";
-	}
-	
-	public static String insertUser(String email, String password){
-		String s ="insert into users values ('" + email + "', '" + password + "', to_date('15:50', 'hh24:mi') );";
-		System.out.println(s);
-		return s;
-	}
-
-
-	
-	
+	}	
 	
 }

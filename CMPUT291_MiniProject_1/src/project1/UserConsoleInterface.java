@@ -1,10 +1,22 @@
 package project1;
 
+import java.sql.ResultSet;
+
 import textDevicePackage.TextDevice;
 
 public class UserConsoleInterface {
 	private final TextDevice io;
 	private SqlManager sqlManager;
+	
+	private String currentUserEmail;
+	public String getCurrentUserEmail() {
+		return currentUserEmail;
+	}
+
+	public void setCurrentUserEmail(String currentUserEmail) {
+		this.currentUserEmail = currentUserEmail;
+	}
+
 	private String currentUserType;
 	
 	public String getCurrentUserType() {
@@ -43,7 +55,7 @@ public class UserConsoleInterface {
 		        	 loop = true;
 		        	 break;
 		         case "login":
-		        	 login();
+		        	 loop = !login();
 		             break;
 		         case "exit":
 		        	 exitProgram();
@@ -87,17 +99,38 @@ public class UserConsoleInterface {
 		}
 	}
 	
-	public void login(){
+	public boolean login(){
 		io.printf("To Login: %n");
-		io.printf("Please enter your username:");
-		String username = getInput();
-		io.printf("Please enter your password:");
-		String password = getInput();
 		
-		String userType = "agent";
-		setCurrentUserType("agent");
-	
-		io.printf("You have successfully logged in as %s with status %s %n", username, userType);
+		io.printf("Please enter your email:");
+		String email = getInput();
+		if ( sqlManager.checkForUserWithEmail(email) ){
+			io.printf("Please enter your password:");
+			String password = getInput();
+			String systemPass = sqlManager.getUserPass(email);
+			if (password.equals(systemPass)){
+				
+				
+				String userType = "guest";
+				
+				if (sqlManager.checkForAgentWithEmail(email)){
+					userType  = "agent";
+				}
+				
+				setCurrentUserEmail(email);
+				setCurrentUserType(userType);
+			
+				io.printf("You have successfully logged in with %s with status %s %n", email, userType);
+				return true;
+			}
+			else{
+				io.printf("Invaid password. %n");
+				return false;
+			}
+		} else {
+			io.printf("email not valid please register. %n");
+			return false;
+		}
 	}
 	
 	public void mainCLI(){
@@ -164,6 +197,7 @@ public class UserConsoleInterface {
 	}
 	
 	public void logout(){
+		sqlManager.logoutUser(this.getCurrentUserEmail());
 		io.printf("Logout %n");
 		exitProgram();
 	}
