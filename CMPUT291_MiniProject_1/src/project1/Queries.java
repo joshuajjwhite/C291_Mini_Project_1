@@ -299,7 +299,5 @@ public class Queries {
 							"WHERE email = '" + email + "'";
 		
 		}
-
-	
 	
 }
