@@ -475,6 +475,11 @@ public class Queries {
 				"FROM airline_agents " +
 				"WHERE email = '" + email + "'";
 		
-		}
+	}
+	
+	public static String getUserBookings(String email){
+		return "SELECT * FROM bookings WHERE tno IN " +
+				"(SELECT tno FROM tickets WHERE email = '" + email + "')";
+	}
 	
 }

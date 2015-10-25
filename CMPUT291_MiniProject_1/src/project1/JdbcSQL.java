@@ -61,8 +61,8 @@ public class JdbcSQL {
 			return rs;
 
 		} catch (Exception e){
+			System.out.println("Could not send command \"" + sql + "\" to sql");
 			System.out.println(e);
-			System.out.println("Could not send commands to sql");
 		}
 		return null;
 	}

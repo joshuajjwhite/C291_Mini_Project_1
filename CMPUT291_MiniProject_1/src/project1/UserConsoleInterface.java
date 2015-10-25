@@ -1,6 +1,7 @@
 package project1;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import textDevicePackage.TextDevice;
 
@@ -246,8 +247,10 @@ public class UserConsoleInterface {
 			
 			//content
 			int counter = 1;
-			
-			
+			ArrayList<String> bookings = sqlManager.getBookings(getCurrentUserEmail());
+			for(String i: bookings){
+				io.printf(i + "%n");
+			}
 			
 			io.printf("Type \"cancel #\" to Cancel Booking %n"
 					 + "2. Back %n"

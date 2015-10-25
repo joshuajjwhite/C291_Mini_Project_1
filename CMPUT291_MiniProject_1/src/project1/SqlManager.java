@@ -1,6 +1,8 @@
 package project1;
 
+import java.awt.List;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 import textDevicePackage.TextDevice;
 
@@ -30,6 +32,22 @@ public class SqlManager {
 //		this.dropTables();
 //		this.createTables();
 //		this.insertData();
+	}
+	
+	public ArrayList<String> getBookings(String email){
+		ResultSet rs = sqlDB.executeQuery(Queries.getUserBookings(email));
+		ArrayList<String> bookings = new ArrayList<String>();
+		try{
+			while(rs.next()){
+				String s = String.valueOf(rs.getInt("tno")); 
+				//+ " " + rs.getString("fare") + String.valueOf(rs.getDate("dep_date")) + " " + rs.getString("seat");
+				bookings.add(0, s);
+			}
+			return bookings;
+		} catch (Exception e){
+			io.printf("Issue getting bookings %n", e);
+			return bookings;
+		}
 	}
 	
 	public boolean checkForAgentWithEmail(String email){
