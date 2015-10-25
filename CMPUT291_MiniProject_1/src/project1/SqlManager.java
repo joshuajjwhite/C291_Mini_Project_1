@@ -27,8 +27,8 @@ public class SqlManager {
 	}
 	
 	public void setup(){
-		this.dropTables();
-		this.createTables();
+//		this.dropTables();
+//		this.createTables();
 	}
 	
 	public boolean checkForAgentWithEmail(String email){
@@ -37,19 +37,21 @@ public class SqlManager {
 			if(!rs.isBeforeFirst()){
 				return false;
 			}
+			return true;
 		} catch (Exception e){
-			io.printf("checkForAgentWithEmail failed %s", e);
+			io.printf("checkForAgentWithEmail failed %s %n", e);
 		}
-		return true;
+
 	}
 	
 	public String getUserPass(String email){
 		ResultSet rs = sqlDB.executeQuery(Queries.findUser(email));
 		String password = "";
 		try {
-			rs.getString("pass");
+			rs.next();
+			password = rs.getString("pass");
 		} catch (Exception e){
-			io.printf("getUserPass failed %s", e);
+			io.printf("getUserPass failed %s %n", e);
 		}
 		return password;
 	}

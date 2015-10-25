@@ -53,7 +53,7 @@ public class Queries {
 				+ "primary key (email, name))",
 				
 				"create table tickets (tno	int, name char(20), email	char(20), paid_price float, primary key (tno),"
-				+ "foreign key (email) references passengers)",
+				+ "foreign key (email,name) references passengers)",
 				
 				"create table bookings (tno		int, flightno	char(6), fare		char(2), dep_date	date,"
 				+ "seat		char(3), primary key (tno,flightno,dep_date), foreign key (tno) references tickets,"
