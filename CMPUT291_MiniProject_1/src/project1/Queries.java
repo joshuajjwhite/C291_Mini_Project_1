@@ -323,20 +323,7 @@ public class Queries {
 		
 	}
 	
-
-	public static String existingBookings(String tno, String flightno, String dep_date){
-		//Used for checking if a booking for a flight already esists
-		//Should return empty and then you can book a flight for the user
-		return "Select * " +
-				"From bookings " +
-				"Where tno = " + tno + " and flightno = " + flightno + " and to_char(dep_date,'DD-Mon-YYYY') = " + dep_date; 
-
-
-	}
 	
-	//delete booking
-	
-	//check available flights
 	
 	
 	public static String[] createAvailableFlights(){
@@ -499,6 +486,17 @@ public class Queries {
 	public static String getUserBookings(String email){
 		return "SELECT * FROM bookings WHERE tno IN " +
 				"(SELECT tno FROM tickets WHERE email = '" + email + "')";
+	}
+
+	
+	//delete booking
+	public static void removeBooking(String tno){
+		//bookings(tno, flightno, fare, dep_date, seat)
+		//used to remove boookings from a flight
+		//remember that the tickets also has to be removed if a booking is deleted
+		return "DELETE FROM bookings " +
+				"WHERE tno = " + tno;
+
 	}
 	
 }
