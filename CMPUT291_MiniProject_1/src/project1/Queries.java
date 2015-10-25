@@ -96,36 +96,35 @@ public class Queries {
 		
 	}
 	
-	public static String searchAcode(String acode){
-		
-		return "SELECT acode"
-				+ "FROM airports"
-				+ "WHERE acode = '" + acode + "';";
-		
-	}
 
-	public static String searchAcodeByCity(String city){
 
-		return "SELECT acode"
+	public static String[] searchAcodeByCity(String city){
+
+		String search[] = { "SELECT acode"
 				+ "FROM airports"
-				+ "WHERE city = '" + city + "';";
+				+ "WHERE city = '" + city + "'"};
+				
+		return search;
+				
 
 	}
 
-	public static String searchAcodeByName(String name){
+	public static String[] searchAcodeByName(String name){
 
-			return "SELECT acode"
-				+ "FROM airports"
-				+ "WHERE name = '" + name + "';";
+		String search[] = {"SELECT acode" +
+				 "FROM airports"
+				+ "WHERE name = '" + name + "'"};
+		return search;
 
 
 	}
 	
-	public static String searchCities(String city){
+	public static String[] searchCities(String city){
 		
-		return "SELECT DISTINCT city, name"
+		String search[] = {"SELECT DISTINCT city, name"
 				+ "FROM airports"
-				+ "WHERE city LIKE '%" + city + "%' OR name LIKE '%" + city + "%';";
+				+ "WHERE city LIKE '%" + city + "%' OR name LIKE '%" + city + "%'"};
+		return search;
 	}
 	
 	
@@ -160,7 +159,7 @@ public class Queries {
 	//check available flights
 	
 	
-	public static String createAvailableFlights2(){
+	public static String createAvailableFlights(){
 	
 	return	"drop table available_flights;" +
 	
@@ -179,7 +178,7 @@ public class Queries {
 	  
 	}
 
-	public static String  createGoodConnections(){
+	public static String  createGoodConnections2(){
 
 		  return "drop table good_connections;" +
  				"create view good_connections(src,dst,dep_date,flightno1,flightno2, layover,price)" +
