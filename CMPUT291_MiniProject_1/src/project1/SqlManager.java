@@ -3,6 +3,7 @@ package project1;
 import java.awt.List;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import textDevicePackage.TextDevice;
 
@@ -34,19 +35,45 @@ public class SqlManager {
 //		this.insertData();
 	}
 	
-	public ArrayList<String> getBookings(String email){
+	public HashMap<String, String> getBookings(String email){
+		String tno;
+		String dep_date;
+		String name = "";
+		String price = "";
+		
 		ResultSet rs = sqlDB.executeQuery(Queries.getUserBookings(email));
-		ArrayList<String> bookings = new ArrayList<String>();
+		HashMap<String, String> bookings = new HashMap<String, String>();
 		try{
 			while(rs.next()){
-				String s = String.valueOf(rs.getInt("tno")); 
+				tno = String.valueOf(rs.getInt("tno"));
+				dep_date = String.valueOf(rs.getString("dep_date"));
+				
+				ResultSet rs_tickets = sqlDB.executeQuery(Queries.checkTicket(tno));
+				while(rs_tickets.next()){
+					name = String.valueOf(rs_tickets.getString("name")).trim();
+					price = String.valueOf(rs_tickets.getFloat("paid_price"));
+					
+				}
+				String s = "tno: " + tno + ", passenger: " + name + ", departure date: " + dep_date +
+						", price: " + price;
+				bookings.put(tno, s);
+//				io.printf("tno: %s, passenger: %s, departure date: %s, price: %s ", tno, name, dep_date, price);
+				
+				
 				//+ " " + rs.getString("fare") + String.valueOf(rs.getDate("dep_date")) + " " + rs.getString("seat");
-				bookings.add(0, s);
 			}
 			return bookings;
 		} catch (Exception e){
 			io.printf("Issue getting bookings %n", e);
 			return bookings;
+		}
+	}
+	
+	public void cancelBooking(String key){
+		try{
+			sqlDB.sendCommand(Queries.removeBooking(key));
+		} catch (Exception e){
+			io.printf("Problem canceling booking %s", e);
 		}
 	}
 	

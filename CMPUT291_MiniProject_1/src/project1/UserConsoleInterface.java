@@ -2,6 +2,8 @@ package project1;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import textDevicePackage.TextDevice;
 
@@ -37,7 +39,7 @@ public class UserConsoleInterface {
 	}
 	
 	public void clearConsole(){
-		for(int i = 0; i <50; i++){
+		for(int i = 0; i <2; i++){
 			io.printf("%n");
 		}
 	}
@@ -204,18 +206,18 @@ public class UserConsoleInterface {
 			io.printf("Search For A Flight Menu %n");
 			io.printf("######################## %n");
 			io.printf("1. Enter Search %n"
-					 + "2. Back %n"
-					 + "3. Logout %n");
+					 + "B. Back %n"
+					 + "L. Logout %n");
 			 
 			String input = getInput().trim().toLowerCase();
 			switch (input){
 				case "1":
 					searchForFlight();
 					break;
-				case "2":
+				case "b":
 					 loop = false;
 					 break;
-				case "3":
+				case "l":
 					 logout();
 					 break;
 				 default:
@@ -246,36 +248,68 @@ public class UserConsoleInterface {
 			io.printf("############### %n");
 			
 			//content
-			int counter = 1;
-			ArrayList<String> bookings = sqlManager.getBookings(getCurrentUserEmail());
-			for(String i: bookings){
-				io.printf(i + "%n");
+			HashMap<String, String> bookings = sqlManager.getBookings(getCurrentUserEmail());
+			for(Entry<String, String> entry: bookings.entrySet()){
+				io.printf(entry.getValue() + "%n");
 			}
 			
-			io.printf("Type \"cancel #\" to Cancel Booking %n"
-					 + "2. Back %n"
-					 + "3. Logout %n");
+			io.printf("%n%nType \"(tno)\" to select Booking %n"
+					 + "B. Back %n"
+					 + "L. Logout %n");
 			 
 			String input = getInput().trim().toLowerCase();
 			switch (input){
-				case "1":
-					cancleBooking();
-					break;
-				case "2":
+				case "b":
 					 loop = false;
 					 break;
-				case "3":
+				case "l":
 					 logout();
 					 break;
 				 default:
+					if ( bookings.containsKey(input) ) {
+					 String value = bookings.get(input);
+					 selectBooking(input, value);
+					} else {
 					 io.printf("Invalid Input %n %n");
-					 break;				
+					 break;
+					}
 			}
 		}
 	}
 	
-	public void cancleBooking(){
-		io.printf("Cancle Booking %n");
+	public void selectBooking(String key, String value){
+		boolean loop = true;
+		while(loop){
+			io.printf("Selected Booking with tno %s%n", key);
+			io.printf("###############################%n");
+			io.printf("Info: %s", value);
+			
+			io.printf("Type \"D\" to delete Booking %n"
+					 + "B. Back %n"
+					 + "L. Logout %n");
+			 
+			String input = getInput().trim().toLowerCase();
+			switch (input){
+				case "d":
+					cancleBooking(key);
+					loop = false;
+					break;
+				case "b":
+					 loop = false;
+					 break;
+				case "l":
+					 logout();
+					 break;
+				 default:
+					 io.printf("Invalid Input");
+					 break;
+			}
+		}
+	}
+	
+	public void cancleBooking(String key){
+		io.printf("Canceling Booking %s %n", key);
+		sqlManager.cancleBooking(key);
 	}
 	
 	public void logout(){
