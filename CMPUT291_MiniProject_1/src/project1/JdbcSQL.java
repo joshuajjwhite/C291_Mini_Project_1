@@ -53,19 +53,18 @@ public class JdbcSQL {
 		}
 	}
 	
-	public void executeQuery(String sql){
+	public ResultSet executeQuery(String sql){
 		try{
 			Statement stmt = m_con.createStatement();
 			ResultSet rs = stmt.executeQuery(sql);
 			
-			while(rs.next()){
-				System.out.println(rs.getString("title")+"," + rs.getInt("movie_number"));
-			}
+			return rs;
 
 		} catch (Exception e){
 			System.out.println(e);
 			System.out.println("Could not send commands to sql");
 		}
+		return null;
 	}
 	
 	

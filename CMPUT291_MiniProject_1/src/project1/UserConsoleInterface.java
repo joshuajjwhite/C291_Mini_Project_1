@@ -57,16 +57,34 @@ public class UserConsoleInterface {
 	
 	public void register(){
 		
-		io.printf("Please create a username: %n");
-		String username = getInput();
-		io.printf("Please create a password: %n");
-		String password = getInput();
-		
-		String userType = "guest";
-		
-		io.printf("Thanks %s, You have been succesfully registered as %s %n", username, userType);
-		
-		
+		boolean success = false;
+		while(!success){
+			
+			
+			io.printf("Please enter an email: %n");
+			String email = getInput();
+			
+			boolean acceptedPass = false;
+			String password = "";
+			while (!acceptedPass){
+				io.printf("Please enter 4 character password: %n");
+				password = getInput();
+				if (password.length() == 4){
+					acceptedPass = true;
+				} else {
+					io.printf("Invalid password. Must be 4 characters ");
+				}
+				
+			}
+			
+			if (!sqlManager.checkForUserWithEmail(email)) {//Ensure email not currently in use in tables
+				sqlManager.addUser(email, password);
+				io.printf("Thanks, You have been succesfully registered with the email %s %n", email);
+				success = true;
+			} else {
+				io.printf("email already exists in system. Please use another %n");
+			}
+		}
 	}
 	
 	public void login(){
