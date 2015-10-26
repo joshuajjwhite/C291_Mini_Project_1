@@ -104,6 +104,7 @@ public class SqlManager {
 	public void cancelBooking(String key){
 		try{
 			sqlDB.sendCommand(Queries.removeBooking(key));
+			sqlDB.sendCommand(Queries.removeTicket(key));
 		} catch (Exception e){
 			io.printf("Problem canceling booking %s", e);
 		}
