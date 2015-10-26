@@ -555,6 +555,11 @@ public class Queries {
 				 "WHERE tno = " + tno;
 
 	}
+	
+	public static String removeTicket(String tno){
+		return "DELETE FROM tickets " +
+				 "WHERE tno = " + tno;
+	}
 
 	//Record flight departure
 	public static String recordDeparture(String flightno, String dep_date, String time){ //time in 24h:min

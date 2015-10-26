@@ -39,9 +39,9 @@ public class UserConsoleInterface {
 	}
 	
 	public void clearConsole(){
-		for(int i = 0; i <2; i++){
-			io.printf("%n");
-		}
+//		for(int i = 0; i <2; i++){
+			io.printf("###########################################################%n");
+//		}
 	}
 	
 	public void greet(){
