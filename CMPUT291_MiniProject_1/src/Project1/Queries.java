@@ -1,4 +1,4 @@
-package project1;
+package Project1;
 
 import java.sql.Date;
 import java.text.DateFormat;
@@ -595,5 +595,15 @@ public class Queries {
 		}
 	}
 
+	//round trip query
+	public static String roundTrip(String src, String dst, String dep_date, String ret_date) {
+		
+		return "Select af1.src, af1.dst, af1.dep_date, af2.dep_date as ret_date, af1.price+af2.price as price" +
+				"From available_flights af1, available_flights af2 " +
+				"Where to_char(af1.dep_date, 'DD/MM/YYYY')='" + dep_date + "' And " +
+				"to_char(af2.dep_date, 'DD/MM/YYYY')='" + ret_date + "' And " +
+				"af1.src = '"+src+"' And af1.dst = '"+dst+"' And af2.src='"+dst+"' And af2.dst='"+src+"'" +
+				"Order By af1.price+af2.price;";
+	}
 	
 }

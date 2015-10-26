@@ -1,4 +1,4 @@
-package project1;
+package Project1;
 
 import java.sql.ResultSet;
 import java.util.HashMap;

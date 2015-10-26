@@ -1,4 +1,4 @@
-package project1;
+package Project1;
 import textDevicePackage.TextDevices;
 
 public class c291MiniProject {
