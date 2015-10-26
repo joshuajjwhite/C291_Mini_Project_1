@@ -450,7 +450,7 @@ public class Queries {
 			 		 "select flightno1, flightno2, src, dst, dep_date, arr_time, stops, layover, price, seats " + 
 			 		 "from " + 
 			 			 "(select gc.flightno1, gc.flightno2, gc.src, gc.dst, gc.dep_date, af.arr_time, 1 stops, gc.layover, af.price, af.seats " +
-			 			 "from good_connections gc, available_flights af " +
+			 			 "from good_connections2 gc, available_flights af " +
 			 			 "where to_char(gc.dep_date,'DD-Mon-YYYY')= '" + dep_date + 
 			 			 "' and gc.src='" + src +
 			 			 "' and gc.dst='" + dst + "' " +
