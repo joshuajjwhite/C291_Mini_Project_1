@@ -426,7 +426,7 @@ public class Queries {
 	private static String getGoodFlights2(String dep_date, String src, String dst, Boolean orderbystops){
 
 
-		String ggf = "select flightno1, flightno2, src, dst, dep_date, to_char(arr_time, 'HH2:MI') , stops, layover, price, seats " + 
+		String ggf = "select flightno1, flightno2, src, dst, dep_date, arr_time , stops, layover, price, seats " + 
 		 		 "from ( " +
 			 		 "select flightno1, flightno2, src, dst, dep_date, arr_time, stops, layover, price, seats " + 
 			 		 "from " + 
