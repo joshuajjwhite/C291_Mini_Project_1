@@ -311,18 +311,18 @@ public class Queries {
 		
 		switch(mon){
 		
-		case 0: return "Jan ";
-		case 1: return "Feb ";
-		case 2: return "Mar ";
-		case 3: return "Apr ";
-		case 4: return "May ";
-		case 5: return "Jun ";
-		case 6: return "Jul ";
-		case 7: return "Aug ";
-		case 8: return "Sep ";
-		case 9: return "Oct ";
-		case 10: return "Nov ";
-		case 11: return "Dec ";	
+		case 0: return "Jan";
+		case 1: return "Feb";
+		case 2: return "Mar";
+		case 3: return "Apr";
+		case 4: return "May";
+		case 5: return "Jun";
+		case 6: return "Jul";
+		case 7: return "Aug";
+		case 8: return "Sep";
+		case 9: return "Oct";
+		case 10: return "Nov";
+		case 11: return "Dec";	
 		
 		}
 		return null;	
@@ -568,14 +568,14 @@ public class Queries {
 
 		return "UPDATE sch_flights " +
 				 "SET act_dep_time = SYSDATE " +
-				 "WHERE dep_date = '" + dep_date + "' and flightno = " + flightno;
+				 "WHERE dep_date = 'TO_DATE('" + dep_date + "', 'dd-MMM-yyyy')' and flightno = '" + flightno + "'";
 		}
 
 		else{
 
 			return "UPDATE sch_flights " +
 				 "SET act_dep_time = to_date('" + time + "', 'hh24:mi') " +
-				 "WHERE dep_date = '" + dep_date + "' and flightno = " + flightno;
+				 "WHERE dep_date = '" + dep_date + "' and flightno = '" + flightno + "'";
 
 		}
 	}	
@@ -588,7 +588,7 @@ public class Queries {
 
 		return "UPDATE sch_flights " +
 				 "SET act_arr_time = SYSDATE " +
-				 "WHERE dep_date = '" + dep_date + "' and flightno = " + flightno;
+				 "WHERE dep_date = 'TO_DATE('" + dep_date + "', 'dd-MMM-yyyy') and flightno = " + flightno;
 		}
 
 		else{

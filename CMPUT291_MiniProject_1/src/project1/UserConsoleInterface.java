@@ -377,7 +377,7 @@ public class UserConsoleInterface {
 			io.printf("Record a Departure %n");
 			io.printf("###############################%n");
 			
-			io.printf("Type \"(FlightNum) (Scheduled Departure Time) (Actual Departure Time)\" to Record a Departure %n"
+			io.printf("Type \"(FlightNum) (Scheduled Departure Date dd-MMM-yyyy) \" to Record a Departure %n"
 					 + "B. Back %n"
 					 + "L. Logout %n");
 			 
@@ -391,6 +391,34 @@ public class UserConsoleInterface {
 					 break;
 				 default:
 					 //do work
+					 boolean successfulInput = true;
+					 String[] splited = input.split("\\s+");
+					 if (splited.length == 2 ){
+						 String act_dep_time = null;
+						 if (splited.length == 3){
+							 act_dep_time = splited[2];
+						 }
+						 String flightNum = splited[0];
+						 String dep_date = splited[1];
+						 if (Queries.getDate(dep_date) != null){
+							 try {
+								 sqlManager.updateDeparture(flightNum, dep_date, act_dep_time);
+							 } catch (Exception e) {
+								 successfulInput = false;
+								 io.printf("Issue Updating Departure Time %n %n");
+								 break; 
+							 }
+						 } else {
+							 successfulInput = false;
+							 io.printf("Invalid Departure Date%n %n");
+							 break;
+						 }
+						 
+					 } else {
+						 successfulInput = false;
+						 io.printf("Invalid Input, three arguments should be provided %n %n");
+						 break;
+					 }
 					 io.printf("Invalid Input");
 					 break;
 			}

@@ -196,4 +196,8 @@ public class SqlManager {
 	public void addUser(String email, String password){
 		sqlDB.sendCommand(Queries.insertUser(email, password));
 	}
+	
+	public void updateDeparture(String flightNum, String dep_time, String act_dep_time){
+		sqlDB.sendCommand(Queries.recordDeparture(flightNum, Queries.getDate(dep_time), act_dep_time));
+	}
 }
