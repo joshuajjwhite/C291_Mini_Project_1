@@ -22,3 +22,18 @@
 3) Testing Strategy
 
 4) Group-work Breakdown Strategy
+	
+	Aaron:
+		-implemented "round trip" functionality
+		-assited in solving runtime issues of the SQL querries
+		-Main editor of documentation
+
+	Quentin
+		- Created user interface
+		- Created how the program parses the return of Querries
+
+	Josh
+
+		-Created majorit of Qurrey base
+			- Support, add and check Querries
+			- Implemented mupltiple "connecting flights" functionality 
