@@ -581,7 +581,7 @@ public class Queries {
 	}	
 
 
-	//reocrd flight arrival
+	//record flight arrival
 	public static String recordArrival(String flightno, String dep_date, String time){ //time in 24h:min
 			
 		if(time == null){
