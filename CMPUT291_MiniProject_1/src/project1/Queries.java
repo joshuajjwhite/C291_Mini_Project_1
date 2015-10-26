@@ -213,23 +213,27 @@ public class Queries {
 				"insert into bookings values (004,'AC028','Y',to_date('23-Oct-2015','DD-Mon-YYYY'),'2A')",
 				"insert into bookings values (005,'AC013','F',to_date('22-Dec-2015','DD-Mon-YYYY'),'20A')",
 				"insert into bookings values (006,'AC020','Y',to_date('22-Dec-2015','DD-Mon-YYYY'),'20B')",
-				"insert into bookings values (007,'AC014','J',to_date('22-Dec-2015','DD-Mon-YYYY'),'10B')"};
+				"insert into bookings values (007,'AC014','J',to_date('22-Dec-2015','DD-Mon-YYYY'),'10B')",
+				
+				"insert into users values ('gandalf@wizard.com', 'lala', to_date('15-Oct-2015','DD-Mon-YYYY'))",
+				
+				"insert into airline_agents values ('gandalf@wizard.com','Gandalf Grey')"
+		};
 		return inserts;
 	}
 	
 	
-	private static String getDate(String indate){
+	public static String getDate(String indate){
 		//used to synthesize a date from user and output it in a way we can parse with
 		
-	SimpleDateFormat df = new SimpleDateFormat();
+	SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
 		
 		Calendar cal = Calendar.getInstance();
 		try {
 			cal.setTime(df.parse(indate));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			throw new RuntimeException("Not a valid date");
+			return null;
 		}
 		
 		int month = cal.get(Calendar.MONTH); 
@@ -268,7 +272,9 @@ public class Queries {
 	
 	}
 	
-
+	public static String findAcode(String acode){
+		return "SELECT * FROM airports WHERE acode = '" + acode + "'";
+	}
 
 	public static String searchAcodeByCity(String city){
 

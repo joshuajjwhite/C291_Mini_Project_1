@@ -164,12 +164,12 @@ public class UserConsoleInterface {
 			io.printf("Airport Main Menu %n");
 			io.printf("################# %n");
 			io.printf("1. Search for flight (& Make Booking) %n"
-					 + "2. List existing bookings (& Cancel Booking) %n"
-			 		 + "3. Logout %n");
+					 + "2. List existing bookings (& Cancel Booking) %n");
 			if (getCurrentUserType().equals("agent")){
-				 io.printf("4. Record flight departure %n"
-						 + "5. Record flight arrival %n");
+				 io.printf("3. Record flight departure %n"
+						 + "4. Record flight arrival %n");
 			}
+			io.printf("L. logout %n");
 			 
 			String input = getInput().trim().toLowerCase();
 			switch (input){
@@ -179,7 +179,7 @@ public class UserConsoleInterface {
 				case "2":
 					listBookings();
 					 break;
-				 case "3":
+				 case "l":
 					 logout();
 					 break;
 				 case "4":
@@ -205,15 +205,12 @@ public class UserConsoleInterface {
 			clearConsole();
 			io.printf("Search For A Flight Menu %n");
 			io.printf("######################## %n");
-			io.printf("1. Enter Search %n"
+			io.printf("Enter Search \"(source) (destination) (DD-Mon-YYYY)\" %n"
 					 + "B. Back %n"
 					 + "L. Logout %n");
 			 
 			String input = getInput().trim().toLowerCase();
 			switch (input){
-				case "1":
-					searchForFlight();
-					break;
 				case "b":
 					 loop = false;
 					 break;
@@ -221,8 +218,38 @@ public class UserConsoleInterface {
 					 logout();
 					 break;
 				 default:
-					 io.printf("Invalid Input %n %n");
-					 break;				
+					 
+					 // Search Logic
+					 boolean successfulInput = true;
+					 String[] splited = input.split("\\s+");
+					 if ( splited.length == 3 ){
+						 String src = splited[0];
+						 String dst = splited[1];
+						 String dep_date = splited[2];
+						 
+						 if (Queries.getDate(dep_date) != null){
+							 HashMap<String, String> flightList = sqlManager.searchFlights(src, dst, dep_date);
+							 if (flightList != null){
+								 displayFlights(flightList);
+							 } else {
+								 successfulInput = false;
+								 io.printf("No flights returned with given src and dst %n %n");
+								 break; 
+							 }
+						 } else {
+							 successfulInput = false;
+							 io.printf("Invalid Date%n %n");
+							 break;
+						 }
+						 
+					 } else {
+						 successfulInput = false;
+						 io.printf("Invalid Input, three arguments should be provided %n %n");
+						 break;
+					 }
+					 
+
+				
 			}
 		}
 		
@@ -230,8 +257,34 @@ public class UserConsoleInterface {
 		
 	}
 	
-	public void searchForFlight(){
-		io.printf("Search For A Flight DD-Mon-YYYY %n");
+	public void displayFlights(HashMap<String, String> flightList){
+		
+		boolean loop = true;
+		while(loop) {
+	
+			io.printf("Found Flights %n");
+			io.printf("#################### %n");
+			
+			for(Entry<String, String> entry: flightList.entrySet()){
+				io.printf(entry.getValue() + "%n");
+			}
+			
+			io.printf("%n%n Enter Search \"(source) (destination) (DD-Mon-YYYY)\" %n"
+					 + "B. Back %n"
+					 + "L. Logout %n");
+			 
+			String input = getInput().trim().toLowerCase();
+			switch (input){
+				case "b":
+					 loop = false;
+					 break;
+				case "l":
+					 logout();
+					 break;
+				 default:
+					 break;
+			}
+		}
 	}
 	
 	public void makeBooking(){
@@ -320,6 +373,29 @@ public class UserConsoleInterface {
 	
 	public void recordADeparture(){
 		io.printf("Record a Departure %n");
+		boolean loop = true;
+		while(loop){
+			io.printf("Record a Departure %n");
+			io.printf("###############################%n");
+			
+			io.printf("Type \"(FlightNum) (Scheduled Departure Time) (Acutal Departure Time)\" to Record departure %n"
+					 + "B. Back %n"
+					 + "L. Logout %n");
+			 
+			String input = getInput().trim().toLowerCase();
+			switch (input){
+				case "b":
+					 loop = false;
+					 break;
+				case "l":
+					 logout();
+					 break;
+				 default:
+					 //do work
+					 io.printf("Invalid Input");
+					 break;
+			}
+		}
 	}
 	
 	public void recordAnArrival(){
