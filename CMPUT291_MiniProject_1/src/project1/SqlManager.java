@@ -55,10 +55,10 @@ public class SqlManager {
 
 		try {
 			while(rs.next()){
-//					flightNo = String.valueOf(rs.getString("flightno1"));
+					flightNo = String.valueOf(rs.getString("flightno1"));
 				
-				
-//					flights.put(flightNo, flightNo);
+					io.printf("HHALO");
+					flights.put(flightNo, flightNo);
 			}
 		} catch (Exception e){
 			io.printf("availflights1 issue %s %n", e);
@@ -195,5 +195,9 @@ public class SqlManager {
 	
 	public void addUser(String email, String password){
 		sqlDB.sendCommand(Queries.insertUser(email, password));
+	}
+	
+	public void updateDeparture(String flightNum, String dep_time, String act_dep_time){
+		sqlDB.sendCommand(Queries.recordDeparture(flightNum, Queries.getDate(dep_time), act_dep_time));
 	}
 }
