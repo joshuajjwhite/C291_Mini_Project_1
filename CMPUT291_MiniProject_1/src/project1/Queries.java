@@ -259,7 +259,7 @@ public class Queries {
 			
 			if(wantthreeflights){
 				String threeflights[] = {availableflights[0], availableflights[1], createGoodConnections3()[0],
-						createGoodConnections3()[1], createGoodConnections2[0], createGoodConnections2[1], getGoodFlights3(dep_date, src, dst, orderbystops)};
+						createGoodConnections3()[1], createGoodConnections2()[0], createGoodConnections2()[1], getGoodFlights3(dep_date, src, dst, orderbystops)};
 				return threeflights;
 			}
 			
