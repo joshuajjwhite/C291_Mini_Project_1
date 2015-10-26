@@ -5,7 +5,7 @@
 	User Guide:
 	1) Start by running the .jar application in the terminal by typing java -jar c291Project1.jar
 	2) Log into the UA Travel application by typing in the letter 'l' and entering you email and password. If you do not have an account, then you can register for one for free by typing in the letter 'r' and entering your email and a 4 character password.
-	3) To view a list of flights, select option 1 in the Airport Main Menu. From here you will want to type in the airport where you will be leaving, the destination airport, and the date of your departure. If you do not know the airport code, type in the name of the airport to get the aiport code you need. A list of available flights will be displayed and ordered by price. If you wish to order the result based on the connections, type ********************,
+	3) To view a list of flights, select option 1 in the Airport Main Menu. From here you will want to type in the airport where you will be leaving, the destination airport, and the date of your departure. If you do not know the airport code, type in the name of the airport to get the airport code you need. A list of available flights will be displayed and ordered by price. If you wish to order the result based on the connections, type ********************,
 	4) To book a flight from the list of flights, type ********************, 
 	5) To cancel a booking that you have made, type in option 2 from the main menu. Next, type in the ticket number to select your booking. After you have selected you booking, type in the letter 'D' and your booking will be canceled.
 	6) To record the departure time of a flight, select option 3 from the main menu. From here type in the flight number of the flight that you want to record, then type in its scheduled departure time and its actual departure time.
@@ -13,27 +13,27 @@
 
 2) Detailed System Design
 	The application is comprised of three main classes:
-	1) UserConsolInterface.java: The user console interface is the user interface that will be displayed when the user runs the application through the terminal. It handles the user login and registration page by waiting for a user input. When the user logins into the application the class will take in a users email and password and send the information to the sql manager to check to see if the email and password is in the user or airline agents tables. When the user registers, the class will take in a valid email and password a and use the sqlmanager to save the users information in the users table.
+	1) UserConsoleInterface.java: The user console interface is the user interface that will be displayed when the user runs the application through the terminal. It handles the user login and registration page by waiting for a user input. When the user logins into the application the class will take in a users email and password and send the information to the sql manager to check to see if the email and password is in the user or airline agents tables. When the user registers, the class will take in a valid email and password a and use the SQLManager to save the users information in the users table.
 
-	2) SQLManager.java: The sql manager handles various sql functionality such as getting sql results and inserting table data. The sqlmanager also initializes the application's data by calling a create, insert and drop tables queries in the Queries class. The class is used by the UserConsoleInterface for registering and logging in users by saving the users data into a table and querying the user table to determine if the user's email and password are in a list of registered users.
+	2) SQLManager.java: The sql manager handles various sql functionality such as getting sql results and inserting table data. The SQLmanager also initializes the application's data by calling a create, insert and drop tables queries in the Queries class. The class is used by the UserConsoleInterface for registering and logging in users by saving the users data into a table and querying the user table to determine if the user's email and password are in a list of registered users.
 
-	3) Queries.java: The Queries class is used to create various sql queries o be used by the sql manager. It is used by the sql manager to initialize table data as well as to return the queries used to get results from sql tables. When registering and loging in users, the sqlmanager uses the queries class to create queris that will check to se if th user in in the users tables and to insert valid user data into the users table.
+	3) Queries.java: The Queries class is used to create various sql queries o be used by the sql manager. It is used by the sql manager to initialize table data as well as to return the queries used to get results from sql tables. When registering and logging in users, the SQLmanager uses the queries class to create queries that will check to se if the user in in the users tables and to insert valid user data into the users table.
 
 3) Testing Strategy
 
 4) Group-work Breakdown Strategy
 	
 	Aaron:
-		-implemented "round trip" functionality
-		-assited in solving runtime issues of the SQL querries
-		-Main editor of documentation
+		- Implemented "round trip" functionality
+		- Assisted in solving runtime issues of the SQL queries
+		- Main editor of documentation
 
 	Quentin
 		- Created user interface
-		- Created how the program parses the return of Querries
+		- Created how the program parses the return of Queries
 
 	Josh
 
-		-Created majorit of Qurrey base
-			- Support, add and check Querries
-			- Implemented mupltiple "connecting flights" functionality 
+		- Created majority of Query base
+		- Support, add and check Queries
+		- Implemented multiple "connecting flights" functionality 
