@@ -251,10 +251,10 @@ public class Queries {
 	
 	public static String[] searchFlight(String src, String dst, String indate, Boolean wantthreeflights, Boolean orderbystops){
 		//Main function for searching for flights
-		//Use watthreeflights for a user who wants three connecting flights as well as two and direct
+		//Use wantthreeflights for a user who wants three connecting flights as well as two and direct
 		//use orderbystops to output a table sorted by stops (least to greatest) and then price secondary
-		
-			String dep_date = getDate(indate);
+			String dep_date = indate;
+			//String dep_date = getDate(indate);
 			String availableflights[] = createAvailableFlights();
 			
 			if(wantthreeflights){

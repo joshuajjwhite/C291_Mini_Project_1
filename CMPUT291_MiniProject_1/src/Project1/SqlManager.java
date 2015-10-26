@@ -47,6 +47,7 @@ public class SqlManager {
 		String price = "Oops";
 		String seats = "Oops";
 
+		//heres the error (--Joshua)
 		ResultSet rs = sqlDB.executeQuery(stmts[0]);
 			try {
 				while(rs.next()){
