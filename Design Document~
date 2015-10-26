@@ -1,0 +1,18 @@
+1) General Overview and User Guide
+	General Overview:
+	When the program is first run, the user will be prompted to either register an account, login with an existing account, or exit the program. If the user decides to create a new account, then they will be prompted to enter in their email address and password. Once a valid email and password has been entered, the user will be brought to the airport main menu page. If the user already has an account, then they will simply log into the system by typing in their email and password. On the main page, the user will be able to search and book a flight, as well as view a list of existing bookings. If the user is an airline agent, they will also be able to record the flight departure time and the flight arrival time. 
+
+	User Guide:
+	1) Start by running the .jar application in the terminal by typing java -jar c291Project1.jar
+	2) Log into the UA Travel application by typing in the letter 'l' and entering you email and password. If you do not have an account, then you can register for one for free by typing in the letter 'r' and entering your email and a 4 character password.
+	3) To view a list of flights, select option 1 in the Airport Main Menu. From here you will want to type in the airport where you will be leaving, the destination airport, and the date of your departure. If you do not know the airport code, type in the name of the airport to get th aiport code you need. A list of available flights will be displayed and ordered by price. If you wish to order the result based on the connections, type ********************,
+	4) To book a flight from the list of flights, type ********************, 
+	5) To cancel a booking that you have made, type in option 2 from the main menu. Next, type in the ticket number to select your booking. After you have selected you booking, type in the letter 'D' and your booking will be canceled.
+	6) To record the departure time of a flight, select option 3 from the main menu. From here type in the flight number of the flight that you want to record, then type in its scheduled departure time and its actual departure time.
+	7) to record the arrival time of a flight, select option 4 from the main menu. Next, type in the flight number of the flight that you wan to record, then type in its actual arrival time.
+
+2) Detailed System Design
+
+3) Testing Strategy
+
+4) Group-work Breakdown Strategy

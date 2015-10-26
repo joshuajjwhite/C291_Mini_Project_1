@@ -182,12 +182,12 @@ public class UserConsoleInterface {
 				 case "l":
 					 logout();
 					 break;
-				 case "4":
+				 case "3":
 					 if(getCurrentUserType().equals("agent")){
 						 recordADeparture();
 					 }
 					 break;
-				 case "5":
+				 case "4":
 					 if(getCurrentUserType().equals("agent")){
 						 recordAnArrival();
 					 }
@@ -378,7 +378,7 @@ public class UserConsoleInterface {
 			io.printf("Record a Departure %n");
 			io.printf("###############################%n");
 			
-			io.printf("Type \"(FlightNum) (Scheduled Departure Time) (Acutal Departure Time)\" to Record departure %n"
+			io.printf("Type \"(FlightNum) (Scheduled Departure Time) (Actual Departure Time)\" to Record departure %n"
 					 + "B. Back %n"
 					 + "L. Logout %n");
 			 
