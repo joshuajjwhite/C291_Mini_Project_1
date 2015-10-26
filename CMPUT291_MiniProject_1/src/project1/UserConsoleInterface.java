@@ -372,13 +372,12 @@ public class UserConsoleInterface {
 	}
 	
 	public void recordADeparture(){
-		io.printf("Record a Departure %n");
 		boolean loop = true;
 		while(loop){
 			io.printf("Record a Departure %n");
 			io.printf("###############################%n");
 			
-			io.printf("Type \"(FlightNum) (Scheduled Departure Time) (Actual Departure Time)\" to Record departure %n"
+			io.printf("Type \"(FlightNum) (Scheduled Departure Time) (Actual Departure Time)\" to Record a Departure %n"
 					 + "B. Back %n"
 					 + "L. Logout %n");
 			 

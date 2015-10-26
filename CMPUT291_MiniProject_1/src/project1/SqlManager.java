@@ -55,10 +55,10 @@ public class SqlManager {
 
 		try {
 			while(rs.next()){
-//					flightNo = String.valueOf(rs.getString("flightno1"));
+					flightNo = String.valueOf(rs.getString("flightno1"));
 				
-				
-//					flights.put(flightNo, flightNo);
+					io.printf("HHALO");
+					flights.put(flightNo, flightNo);
 			}
 		} catch (Exception e){
 			io.printf("availflights1 issue %s %n", e);
