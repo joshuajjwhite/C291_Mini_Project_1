@@ -46,7 +46,7 @@ public class SqlManager {
 		
 		String[] stmts = null;
 		if(roundTrip){
-			stmts = Queries.roundTrip(src.toUpperCase(), dst.toUpperCase(), dep_date, ret_date), "";
+			stmts = Queries.roundTrip(src.toUpperCase(), dst.toUpperCase(), dep_date, ret_date);
 		} else {
 			stmts = Queries.searchFlight(src.toUpperCase(), dst.toUpperCase(), dep_date, threeConn, orderByConn);
 		}
