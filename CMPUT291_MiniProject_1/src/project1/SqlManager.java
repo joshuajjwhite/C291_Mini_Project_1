@@ -1,6 +1,7 @@
 package project1;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.util.HashMap;
 import textDevicePackage.TextDevice;
 
@@ -35,9 +36,14 @@ public class SqlManager {
 	public HashMap<String, String> searchFlights(String src, String dst, String dep_date){
 		// good_connections(src,dst,dep_date,flightno1,flightno2, layover,price)
 		//available_flights(flightno, dep_date, src , dst, dep_time, arr_time, fare, seats,price)
+		io.printf("%d %n", src.length());
+		io.printf("%d %n", dst.length());
 		
+		io.printf("%s %n", src);
+		io.printf("%s %n", dst);
+		io.printf("%s %n", dep_date);
 		HashMap<String, String> flights = new HashMap<String, String>();
-		String[] stmts = Queries.searchFlight(src, dst, dep_date, false, false);
+		String[] stmts = Queries.searchFlight(src.toUpperCase(), dst.toUpperCase(), dep_date, false, false);
 		String flightNo = "Oops";
 		String sourceAcode = "Oops";
 		String dstAcode = "Oops";
@@ -49,20 +55,43 @@ public class SqlManager {
 
 		//heres the error (--Joshua)
 		ResultSet rs = null;
-		for (String stmt: stmts){
-			rs = sqlDB.executeQuery(stmt);
+//		for (String stmt: stmts[0:stmts.length-1]){
+		for (int i = 0; i < stmts.length-1; i++){
+			rs = sqlDB.executeQuery(stmts[i]);
 		}
-
-		try {
-			while(rs.next()){
-					flightNo = String.valueOf(rs.getString("flightno1"));
+		rs = sqlDB.executeQuery(stmts[stmts.length-1]);
+		try{
+			
+			ResultSetMetaData rsetMD = rs.getMetaData();
+		    int columnCount = rsetMD.getColumnCount();
+			
+			while (rs.next()){
 				
-					io.printf("HHALO");
-					flights.put(flightNo, flightNo);
+	      		for (int c=1; c<=columnCount; c++){
+					String name = rsetMD.getColumnLabel(c); // get column name
+					Object o = rs.getObject(c); // get content at that index
+					String value="null";
+					if (o!=null) {
+						value = o.toString();
+	     		 	}
+	      		
+	      		io.printf("%s - %s %n", name, value);
+	      		}
 			}
-		} catch (Exception e){
-			io.printf("availflights1 issue %s %n", e);
+		} catch (Exception e) {
+			io.printf("Error getting boat names %s %n", e);
 		}
+		
+//		try {
+//			while(rs.next()){
+//					flightNo = String.valueOf(rs.getString("flightno1"));
+//				
+//					io.printf("HHALO");
+//					flights.put(flightNo, flightNo);
+//			}
+//		} catch (Exception e){
+//			io.printf("availflights1 issue %s %n", e);
+//		}
 		return flights;
 	}
 	

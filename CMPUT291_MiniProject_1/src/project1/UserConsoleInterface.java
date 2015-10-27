@@ -81,7 +81,7 @@ public class UserConsoleInterface {
 	}
 	
 	public String getInput(){
-		String input = io.readLine().trim().toLowerCase();;
+		String input = io.readLine().trim();
 		return input;
 	}
 	
@@ -209,7 +209,7 @@ public class UserConsoleInterface {
 					 + "B. Back %n"
 					 + "L. Logout %n");
 			 
-			String input = getInput().trim().toLowerCase();
+			String input = getInput().trim();
 			switch (input){
 				case "b":
 					 loop = false;
@@ -223,9 +223,9 @@ public class UserConsoleInterface {
 					 boolean successfulInput = true;
 					 String[] splited = input.split("\\s+");
 					 if ( splited.length == 3 ){
-						 String src = splited[0];
-						 String dst = splited[1];
-						 String dep_date = splited[2];
+						 String src = splited[0].trim();
+						 String dst = splited[1].trim();
+						 String dep_date = splited[2].trim();
 						 
 						 if (Queries.getDate(dep_date) != null){
 							 HashMap<String, String> flightList = sqlManager.searchFlights(src, dst, dep_date);
