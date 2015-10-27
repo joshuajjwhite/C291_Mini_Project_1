@@ -227,6 +227,10 @@ public class SqlManager {
 	}
 	
 	public void updateDeparture(String flightNum, String dep_time, String act_dep_time){
-		sqlDB.sendCommand(Queries.recordDeparture(flightNum, Queries.getDate(dep_time), act_dep_time));
+		sqlDB.sendCommand(Queries.recordDeparture(flightNum.toUpperCase(), Queries.getDate(dep_time), act_dep_time));
+	}
+	
+	public void updateArrival(String flightNum, String dep_time, String act_arr_time){
+		sqlDB.sendCommand(Queries.recordArrival(flightNum.toUpperCase(), Queries.getDate(dep_time), act_arr_time));
 	}
 }

@@ -403,6 +403,8 @@ public class UserConsoleInterface {
 						 if (Queries.getDate(dep_date) != null){
 							 try {
 								 sqlManager.updateDeparture(flightNum, dep_date, act_dep_time);
+								 io.printf("Departure time has been updated %n %n");
+								 break;
 							 } catch (Exception e) {
 								 successfulInput = false;
 								 io.printf("Issue Updating Departure Time %n %n");
@@ -419,14 +421,62 @@ public class UserConsoleInterface {
 						 io.printf("Invalid Input, three arguments should not be provided %n %n");
 						 break;
 					 }
-					 io.printf("Invalid Input");
-					 break;
 			}
 		}
 	}
 	
 	public void recordAnArrival(){
-		io.printf("Record an Arrival %n");
+		boolean loop = true;
+		while(loop){
+			io.printf("Record an Arrival %n");
+			io.printf("###############################%n");
+			
+			io.printf("Type \"(FlightNum) (Scheduled Departure Date DD-MON-YYYY) \" to Record an Arrival %n"
+					 + "B. Back %n"
+					 + "L. Logout %n");
+			 
+			String input = getInput().trim().toLowerCase();
+			switch (input){
+				case "b":
+					 loop = false;
+					 break;
+				case "l":
+					 logout();
+					 break;
+				default:
+					//do work
+					boolean successfulInput = true;
+					String[] splited = input.split("\\s+");
+					if (splited.length == 2 ){
+						 String act_arr_time = null;
+						 if (splited.length == 3){
+							 act_arr_time = splited[2];
+						 }
+						 String flightNum = splited[0];
+						 String dep_date = splited[1];
+						 if (Queries.getDate(dep_date) != null){
+							 try {
+								 sqlManager.updateArrival(flightNum, dep_date, act_arr_time);
+								 io.printf("Arrival time has been updated %n %n");
+								 break;
+							 } catch (Exception e) {
+								 successfulInput = false;
+								 io.printf("Issue Updating Arrival Time %n %n");
+								 break; 
+							 }
+						 } else {
+							 successfulInput = false;
+							 io.printf("Invalid Arrival Date%n %n");
+							 break;
+						 }
+						 
+					 } else {
+						 successfulInput = false;
+						 io.printf("Invalid Input, three arguments should not be provided %n %n");
+						 break;
+					 }
+			}
+		}
 	}
 
 	

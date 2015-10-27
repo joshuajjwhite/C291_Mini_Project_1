@@ -1,13 +1,18 @@
 package project1;
 
 import java.sql.Date;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-public class Queries {
+import textDevicePackage.TextDevice;
+import textDevicePackage.TextDevices;
 
+public class Queries {
+	private final static TextDevice io = TextDevices.defaultTextDevice();
+	
 	public static String[] dropTables(){
 		
 		 String drop[] = { "drop table airline_agents cascade constraints ",
@@ -546,12 +551,12 @@ public class Queries {
 	public static String recordDeparture(String flightno, String dep_date, String time){ //time in 24h:min
 			
 		if(time == null){
-
+		
 		return "UPDATE sch_flights " +
-				 "SET act_dep_time = SYSDATE " +
-				 "WHERE dep_date = (TO_DATE('" + dep_date + "', 'DD-MON-YYYY')) and flightno = '" + flightno + "'";
+	 		"SET act_dep_time = SYSDATE " +
+	 		"WHERE dep_date = (TO_DATE('" + dep_date + "', 'DD-MON-YY')) and flightno = '" + flightno + "'";
 		}
-
+		
 		else{
 
 			return "UPDATE sch_flights " +
@@ -569,7 +574,7 @@ public class Queries {
 
 		return "UPDATE sch_flights " +
 				 "SET act_arr_time = SYSDATE " +
-				 "WHERE dep_date = (TO_DATE('" + dep_date + "', 'DD-MON-YYYY')) and flightno = " + flightno;
+				 "WHERE dep_date = (TO_DATE('" + dep_date + "', 'DD-MON-YY')) and flightno = '" + flightno + "'";
 		}
 
 		else{
