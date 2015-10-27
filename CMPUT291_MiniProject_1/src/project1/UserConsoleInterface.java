@@ -253,35 +253,35 @@ public class UserConsoleInterface {
 	}
 	
 	public void displayFlights(HashMap<Integer, HashMap<String, String>> flightList){
+
+		HashMap<String, String> flight; 
+
+		io.printf("Found Flights %n");
+		io.printf("#################### %n");
+		
+		for(int i=1;i<=flightList.size();i++){
+			flight = flightList.get(i);
+			
+			io.printf("Flight Selection %d: %n", i);
+			io.printf("---------------------- %n");
+			io.printf("FLIGHTNO1 - %s %n", flight.get("FLIGHTNO1"));
+			if (flight.containsKey("FLIGHTNO2") && flight.get("FLIGHTNO2")!="null") { io.printf("FLIGHTNO2 - %s %n", flight.get("FLIGHTNO2")); }
+			if (flight.containsKey("FLIGHTNO3") && flight.get("FLIGHTNO3")!="null") { io.printf("FLIGHTNO3 - %s %n", flight.get("FLIGHTNO3")); }
+			io.printf("SOURCE - %s %n", flight.get("SRC"));
+			io.printf("DESTINATION - %s %n", flight.get("DST"));
+			io.printf("DEPARTURE TIME - %s %n", flight.get("DEP_TIME"));
+			io.printf("ARRIVAL TIME - %s %n", flight.get("ARR_TIME"));
+			io.printf("# OF STOPS - %s %n", flight.get("STOPS"));
+			io.printf("LAYOVER TIME - %s %n", flight.get("LAYOVER1")); //DO MATH FOOL AND CONDITIONALS YO
+			io.printf("PRICE - %s %n", flight.get("PRICE"));
+			io.printf("SEATS - %s %n", flight.get("SEATS"));
+			
+			io.printf("%n %n");
+		}		
 		
 		boolean loop = true;
-		HashMap<String, String> flight; 
 		while(loop) {
-	
-			io.printf("Found Flights %n");
-			io.printf("#################### %n");
-			
-			for(int i=1;i<=flightList.size();i++){
-				flight = flightList.get(i);
-				
-				io.printf("Flight Number %d: %n", i);
-				io.printf("---------------------- %n");
-				io.printf("FLIGHTNO1 - %s %n", flight.get("FLIGHTNO1"));
-				if (flight.containsKey("FLIGHTNO2") && flight.get("FLIGHTNO2")!="null") { io.printf("FLIGHTNO2 - %s %n", flight.get("FLIGHTNO2")); }
-				if (flight.containsKey("FLIGHTNO3") && flight.get("FLIGHTNO3")!="null") { io.printf("FLIGHTNO3 - %s %n", flight.get("FLIGHTNO3")); }
-				io.printf("SOURCE - %s %n", flight.get("SRC"));
-				io.printf("DESTINATION - %s %n", flight.get("DST"));
-				io.printf("DEPARTURE TIME - %s %n", flight.get("DEP_TIME"));
-				io.printf("ARRIVAL TIME - %s %n", flight.get("ARR_TIME"));
-				io.printf("# OF STOPS - %s %n", flight.get("STOPS"));
-				io.printf("LAYOVER TIME - %s %n", flight.get("LAYOVER1")); //DO MATH FOOL AND CONDITIONALS YO
-				io.printf("PRICE - %s %n", flight.get("PRICE"));
-				io.printf("SEATS - %s %n", flight.get("SEATS"));
-				
-				io.printf("%n %n");
-			}
-			
-			io.printf("%n%n Enter Search \"(Source) (Destination) (Departure Date DD-Mon-YYYY)\" %n"
+			io.printf("Choose desried flight number%n"
 					 + "B. Back %n"
 					 + "L. Logout %n");
 			 
@@ -294,13 +294,21 @@ public class UserConsoleInterface {
 					 logout();
 					 break;
 				 default:
+					 if(Integer.valueOf(input) <= flightList.size() && Integer.valueOf(input) > 0){
+						makeBooking(flightList.get(Integer.valueOf(input)));
+					 }
+					 io.printf("Invalid flight selection. Try again? %n");
 					 break;
 			}
 		}
 	}
 	
-	public void makeBooking(){
-		io.printf("Book A Flight %n");
+	public void makeBooking(HashMap<String, String> flight){
+		io.printf("Booking A Flight %n");
+		io.printf("####################%n");
+		io.printf("Please provide your name %n");
+		String userName = getInput();
+		
 	}
 	
 	public void listBookings(){
