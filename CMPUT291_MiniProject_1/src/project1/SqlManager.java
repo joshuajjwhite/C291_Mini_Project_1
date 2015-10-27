@@ -156,7 +156,6 @@ public class SqlManager {
 		return password;
 	}
 	
-	
 	public void logoutUser(String email){
 		sqlDB.sendCommand(Queries.updateLastLogin(email));
 	}
@@ -344,5 +343,41 @@ public class SqlManager {
 	
 	public void updateArrival(String flightNum, String dep_time, String act_arr_time){
 		sqlDB.sendCommand(Queries.recordArrival(flightNum.toUpperCase(), Queries.getDate(dep_time), act_arr_time));
+	}
+	
+	public boolean checkPassengers(String email, String name) {
+		ResultSet rs = sqlDB.executeQuery(Queries.checkPassengers(email, name));
+		try{
+			if(!rs.isBeforeFirst()){
+				return false;
+			}
+		} catch (Exception e){
+			io.printf("checkPassengers failed %s", e);
+		}
+		return true; 
+	}
+	
+	public boolean checkTicket(Integer tno) {
+		ResultSet rs = sqlDB.executeQuery(Queries.checkTicket(tno.toString()));
+		try{
+			if(!rs.isBeforeFirst()){
+				return false;
+			}
+		} catch (Exception e){
+			io.printf("checkTicket failed %s", e);
+		}
+		return true; 
+	}
+	
+	public void addPassenger(String email, String name, String country) {
+		sqlDB.sendCommand(Queries.addPassenger(email, name, country));
+	}
+	
+	public void addTicket(Integer ticketNumber,String name,String email,String paid_price) {
+		sqlDB.sendCommand(Queries.addTicket(ticketNumber.toString(), name, email, paid_price));
+	}
+	
+	public void addBooking(Integer ticketNumber, String flightno, String fare, String dep_date, String seat) {
+		sqlDB.sendCommand(Queries.addBooking(ticketNumber.toString(), flightno, fare, dep_date, seat));
 	}
 }

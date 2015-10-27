@@ -1,7 +1,9 @@
 package project1;
 
 import java.sql.ResultSet;
+
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -397,8 +399,33 @@ public class UserConsoleInterface {
 		io.printf("Booking A Flight %n");
 		io.printf("####################%n");
 		io.printf("Please provide your name %n");
+		
 		String userName = getInput();
 		
+		//If the passenger has not been entered before, this will add them.
+		if (!sqlManager.checkPassengers(this.getCurrentUserEmail(), userName)) {
+			io.printf("%nYou are not registered in the passengers list. %n");
+			io.printf("Please provide the country that you are currently living in. %n");
+			
+			String country = getInput();
+			sqlManager.addPassenger(this.getCurrentUserEmail(), userName, country);
+		}
+		
+		//Give them a ticket and add a booking.
+		Integer ticketNumber;
+		Boolean validTicketNumber = false;
+		Random randomGenerator = new Random();
+		
+		for (int i = 1; i <= 3; i++) {
+			while (!validTicketNumber) {
+				ticketNumber = randomGenerator.nextInt(2147483647);
+				if(sqlManager.checkTicket(ticketNumber)) { validTicketNumber = true; }
+			}
+			
+			//Insert ticket and booking	io.printf("LAYOVER TIME - %s %n", flight.get("LAYOVER1")); //DO MATH FOOL AND CONDITIONALS YO
+			//sqlManager.addTicket(ticketNumber, userName, this.getCurrentUserEmail(), flight.get("PRICE"));
+			//sqlManager.addBooking(ticketNumber, flightno, fare, flight.get("DEP_DATE"), seat);
+		}
 	}
 	
 	public void listBookings(){
