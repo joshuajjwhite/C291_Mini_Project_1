@@ -1,3 +1,17 @@
+UA Travel Java Application with SQL
+Group:
+	-Aaron Plamondon: aaplamon
+	-Quentin Lautischer: lautischer
+	-Joshua White: jjwhite
+
+GitHub repo: https://github.com/joshuajjwhite/C291_Mini_Project_1
+
+Resources:
+	-Stack Overflow
+	-Oracle Documentation
+	-Assingment two posted solutions
+	-http://www.techonthenet.com
+
 1) General Overview and User Guide
 	General Overview:
 	When the program is first run, the user will be prompted to either register an account, login with an existing account, or exit the program. If the user decides to create a new account, then they will be prompted to enter in their email address and password. Once a valid email and password has been entered, the user will be brought to the airport main menu page. If the user already has an account, then they will simply log into the system by typing in their email and password. On the main page, the user will be able to search and book a flight, as well as view a list of existing bookings. If the user is an airline agent, they will also be able to record the flight departure time and the flight arrival time. 
