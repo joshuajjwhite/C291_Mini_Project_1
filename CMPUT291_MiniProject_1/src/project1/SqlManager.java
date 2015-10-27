@@ -98,33 +98,34 @@ public class SqlManager {
 		HashMap<String, String> ticketInfo = new HashMap<String, String>();
 		try{
 			while(rs.next()){
-				tno = String.valueOf(rs.getInt("tno"));
+			    
+			    ticketCounter ++;
+
+				tno = String.valueOf(rs.getInt("TNO"));
 				dep_date = String.valueOf(rs.getString("dep_date"));
 				
 				ResultSet rs_tickets = sqlDB.executeQuery(Queries.checkTicket(tno));
-			    ticketCounter ++;
-				while (rs_tickets.next()){
-					
-					ResultSetMetaData rsetMD = rs.getMetaData();
+
+				while(rs_tickets.next()){
+	
+					ResultSetMetaData rsetMD = rs_tickets.getMetaData();
 				    int columnCount = rsetMD.getColumnCount();
 
 
 		      		for (int c=1; c<=columnCount; c++){
 						String name = rsetMD.getColumnLabel(c); // get column name
-						Object o = rs.getObject(c); // get content at that index
+						Object o = rs_tickets.getObject(c); // get content at that index
 						String value="null";
 						if (o!=null) {
 							value = o.toString();
 		     		 	}
 						
-						io.printf("%s %s ", name, value);
-						
 						ticketInfo.put(name, value);
+						io.printf("%s %s %n", name, value);
 		      		}
-	
-
 				}
-	      		tickets.put(ticketCounter, ticketInfo);
+		      	tickets.put(ticketCounter, ticketInfo);
+
 			}
 			return tickets;
 		} catch (Exception e){

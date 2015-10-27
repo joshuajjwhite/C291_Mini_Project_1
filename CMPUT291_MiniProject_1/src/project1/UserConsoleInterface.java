@@ -388,9 +388,11 @@ public class UserConsoleInterface {
 				 default:
 					 if(Integer.valueOf(input) <= flightList.size() && Integer.valueOf(input) > 0){
 						makeBooking(flightList.get(Integer.valueOf(input)));
-					 }
+						return;
+					 } else{
 					 io.printf("Invalid flight selection. Try again? %n");
 					 break;
+					 }
 			}
 		}
 	}
@@ -423,7 +425,7 @@ public class UserConsoleInterface {
 		for (int i = 1; i <= 3; i++) {
 			if(flight.containsKey("FLIGHTNO" + Integer.toString(i)) && flight.get("FLIGHTNO"  + Integer.toString(i))!="null") {
 				while (!validTicketNumber) {
-					ticketNumber = randomGenerator.nextInt(2147483647);
+					ticketNumber = randomGenerator.nextInt(21474);
 					if(!sqlManager.checkTicket(ticketNumber)) { validTicketNumber = true; }
 				}
 				
@@ -445,12 +447,7 @@ public class UserConsoleInterface {
 				//Insert ticket and booking
 				flightNo = flight.get("FLIGHTNO"  + Integer.toString(i));
 				sqlManager.addTicket(ticketNumber, userName, this.getCurrentUserEmail(), flight.get("PRICE"));
-				try {
-					sqlManager.addBooking(ticketNumber, flightNo, sqlManager.getFareType(flightNo), flight.get("DEP_DATE"), seatString);
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				sqlManager.addBooking(ticketNumber, flightNo, flight.get("FARE" + Integer.toString(i)), flight.get("DEP_DATE"), seatString);
 				
 				//Print ticket info:
 				io.printf("Your ticket number for flight %s is: %d. %n", flightNo, ticketNumber);
@@ -472,19 +469,19 @@ public class UserConsoleInterface {
 			//content
 			HashMap<Integer, HashMap<String, String>> bookings = sqlManager.getBookings(getCurrentUserEmail());
 			if (bookings != null){
-				for(int i=1;i<=bookings.size();i++){
+//				io.printf("Booking %d %n", bookings.size());
+				for(int i=1; i<=bookings.size(); i++){	
 					ticket = bookings.get(i);
-					
+					io.printf("Booking %d %n", i);
+					//TNO 2 FLIGHTNO AC027  FARE J  DEP_DATE 2015-10-23 00:00:00.0 SEAT 10A TNO 6 FLIGHTNO AC020  FARE Y  DEP_DATE 2015-12-22 00:00:00.0 SEAT 20B Ticket Selection 1: 
 					//the ticket number, the passenger name, the departure date and the price.
 					io.printf("Ticket Selection %d: %n", i);
 					io.printf("---------------------- %n");
 					io.printf("Ticket Number - %s %n", ticket.get("TNO"));
 					io.printf("Passenger - %s %n", ticket.get("NAME"));
 					io.printf("Departure Time - %s %n", ticket.get("DEP_DATE"));
-					io.printf("Price - %s %n", ticket.get("PRICE"));
-	
-					
-					io.printf("%n %n");
+					io.printf("Price - %s %n %n", ticket.get("PRICE"));
+					ticket.clear();
 				}
 			} else {
 				io.printf("Issue Getting Bookings");

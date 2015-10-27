@@ -473,9 +473,9 @@ public class Queries {
 
 	public static String addBooking(String tno, String flightno, String fare, String dep_date, String seat){
 		//bookings(tno, flightno, fare, dep_date, seat)
-			return "INSERT into bookings values( " +
-				tno + ", " + flightno + ", '" + fare + "', " +
-				 "to_date('" +dep_date+ "', 'DD-Mon-YYYY') " + ", " + seat + ")" ;
+			return "INSERT into bookings values(" +
+				tno + ", '" + flightno + "', '" + fare + "', " +
+				 "TO_DATE('" +dep_date+ "', 'DD-MON-YYYY') " + ", '" + seat + "')" ;
 	}
 	
 	public static String checkTicket(String tno) {

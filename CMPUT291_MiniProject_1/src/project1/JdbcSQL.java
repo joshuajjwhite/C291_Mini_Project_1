@@ -9,8 +9,8 @@ public class JdbcSQL {
 	
 	String m_url = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
 	String m_driverName = "oracle.jdbc.driver.OracleDriver";
-	String m_username = "lautisch";
-	String m_password = "lalaman123";
+	String m_username = "anplamon";
+	String m_password = "Doubld00)m";
 	
 	Connection m_con;
 			
