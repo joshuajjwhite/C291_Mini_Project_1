@@ -199,16 +199,118 @@ public class UserConsoleInterface {
 		}
 	}
 	
+	public String userAcode(){
+		
+		String inputsrc = getInput().trim();
+		//Search for Acode
+		if(sqlManager.searchACODE(inputsrc)){
+			
+			return inputsrc;
+			
+		}
+	
+		//Search for City
+	
+		ArrayList<String> cities =  sqlManager.searchCity(inputsrc);
+		
+		if(cities.size() == 1){
+		
+			io.printf(cities.get(0) + "%n");
+			return sqlManager.getAcodeByCity(cities.get(0));
+			
+		}
+		else if(cities.size() == 0){
+			io.printf("There were no cities found %n");
+		
+		}
+		else{
+			io.printf("Please clarify which city you meant (type none to not select any city): %n");
+			
+				for(String city: cities){
+					io.printf(city + "%n");
+				}
+			
+			String input = getInput().trim();
+			ArrayList<String> ccities =  sqlManager.searchCity(input);
+				if(ccities.size() == 1){
+					
+					return sqlManager.getAcodeByCity(ccities.get(0));}
+				else{io.printf("There were no cities found %n");}
+				
+		}
+		
+		
+		
+		//search names
+		ArrayList<String> names =  sqlManager.searchName(inputsrc);
+		
+		if(names.size() == 1){
+		
+			io.printf(names.get(0) + "%n");
+			return sqlManager.getAcodeByName(names.get(0));
+		
+		}
+		else if(cities.size() == 0){
+			io.printf("There were no Airports found %n");
+		
+		}
+		else{
+			io.printf("Please clarify which name you meant (type none to not select any name) %n");
+			String input = getInput().trim();
+			ArrayList<String> cnames =  sqlManager.searchName(input);
+				if(cnames.size() == 1){
+					
+					return sqlManager.getAcodeByName(cnames.get(0));}
+				else{io.printf("There were no Airports found %n");}
+				
+		}
+		
+		return null;
+	
+}
+	
 	public void searchForFlightMenu(){
 		boolean loop = true;
 		while(loop) {
 			clearConsole();
 			io.printf("Search For A Flight Menu %n");
 			io.printf("######################## %n");
-			io.printf("Enter Search \"(source) (destination) (DD-Mon-YYYY)\" %n"
+			
+			String src = null;
+			String dst = null;
+			String dep_date = null;
+			
+			io.printf("Enter Search \"(source)\" %n");
+			src = userAcode();
+				if(src == null){
+					break;
+				}
+			io.printf("Enter Search \"(destination)\" %n");
+			dst = userAcode();
+			if(dst == null){
+				break;
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		
+			
+			
+			
+			/*io.printf("Enter Search \"(source) (destination) (DD-Mon-YYYY)\" %n"
 					 + "B. Back %n"
-					 + "L. Logout %n");
-			 
+					 + "L. Logout %n"); */
+			
+			/*	
+			
+			
 			String input = getInput().trim();
 			switch (input){
 				case "b":
@@ -246,16 +348,14 @@ public class UserConsoleInterface {
 						 successfulInput = false;
 						 io.printf("Invalid Input, three arguments should be provided %n %n");
 						 break;
-					 }
-					 
+					 } 
+					 */
 
 				
 			}
 		}
 		
 		
-		
-	}
 	
 	public void displayFlights(HashMap<String, String> flightList){
 		

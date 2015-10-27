@@ -2,6 +2,8 @@ package project1;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import textDevicePackage.TextDevice;
 
@@ -221,6 +223,115 @@ public class SqlManager {
 		}
 		return true; 
 	}
+	
+	public boolean searchACODE(String s){
+		
+		ResultSet rs = sqlDB.executeQuery(Queries.findAcode(s));
+		if(getRowCount(rs) == 1){
+			return true;
+		}
+		
+		else return false;
+		
+		
+	}
+	
+	private int getRowCount(ResultSet resultSet) {
+		    if (resultSet == null) {
+		        return 0;
+		    }
+		    try {
+		    	int counter = 0;
+		        while(resultSet.next()){
+		        	counter ++;
+		        }
+		        return counter;
+		    } catch (SQLException exp) {
+		        exp.printStackTrace();
+		    } 
+		    return 0;
+		}
+	
+	public ArrayList<String> searchCity(String s){
+		ResultSet rs = sqlDB.executeQuery(Queries.searchCities(s));
+		ArrayList<String> ar = new ArrayList<String>();
+		try {
+			while(rs.next()){
+				
+				try {
+					ar.add(rs.getString("CITY"));
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		return ar;
+		
+		
+	}
+	
+	public ArrayList<String> searchName(String s){
+		ResultSet rs = sqlDB.executeQuery(Queries.searchCities(s));
+		ArrayList<String> ar = new ArrayList<String>();
+		try {
+			while(rs.next()){
+				
+				try {
+					ar.add(rs.getString("NAME"));
+
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		return ar;
+		
+		
+	}
+	
+	public String getAcodeByCity(String city){
+		
+		ResultSet rs = sqlDB.executeQuery(Queries.searchAcodeByCity(city));
+		try {
+			return rs.getString("ACODE");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	public String getAcodeByName(String name){
+		
+		ResultSet rs = sqlDB.executeQuery(Queries.searchAcodeByName(name));
+		try {
+			return rs.getString("ACODE");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+	
+	
 	
 	public void addUser(String email, String password){
 		sqlDB.sendCommand(Queries.insertUser(email, password));
