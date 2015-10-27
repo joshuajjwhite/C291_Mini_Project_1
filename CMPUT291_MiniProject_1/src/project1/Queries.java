@@ -449,28 +449,24 @@ public class Queries {
 		
 		else{ggf = ggf + "Order BY price ";}
 		
-		
 		return ggf;
 		
 	}
 
-
+	public static String getFare(String flightNo) {
+		return "";
+	}
+	
 	public static String checkPassengers(String email, String name){
 		//passengers(email, name, country) 
 		 return "SELECT email, name " + 
 				 "FROM passengers " +
 				 "WHERE email = '" + email + "' and name = '" + name + "' ";
-
-		
-
 	}
 
 	public static String addPassenger(String email, String name, String country){
-
 		return "INSERT into passengers values(" +
 				email + "', ' " + name + "', ' " + country + "') " ;
-		
-	
 	}
 
 	public static String addBooking(String tno, String flightno, String fare, String dep_date, String seat){
@@ -478,8 +474,6 @@ public class Queries {
 			return "INSERT into bookings values( " +
 				tno + ", " + flightno + ", '" + fare + "', " +
 				 "to_date('" +dep_date+ "', 'DD-Mon-YYYY') " + ", " + seat + ")" ;
-			
-		
 	}
 	
 	public static String checkTicket(String tno){
@@ -499,27 +493,22 @@ public class Queries {
 	
 	public static String findUser(String email){
 		return "select * from users where email = '" + email + "'";
-		
 	}
 	
 	public static String insertUser(String email, String password){
 		return "insert into users values ('" + email + "', '" + password + "', SYSDATE) ";
-		
 	}
 	
 	public static String updateLastLogin(String email){
 		return "UPDATE users " +
 				 "SET last_login = SYSDATE " +
 				 "WHERE email = '" + email + "' ";
-		
-		
 		}	
 	
 	public static String findAgent(String email){
 		return "SELECT * " +
 				 "FROM airline_agents " +
 				 "WHERE email = '" + email + "'";
-		
 	}
 	
 	public static String getUserBookings(String email){
@@ -527,7 +516,6 @@ public class Queries {
 				 "(SELECT tno FROM tickets WHERE email = '" + email + "') ";
 	}
 
-	
 	//delete booking
 	public static String removeBooking(String tno){
 		//bookings(tno, flightno, fare, dep_date, seat)
@@ -535,7 +523,6 @@ public class Queries {
 		//remember that the tickets also has to be removed if a booking is deleted
 		return "DELETE FROM bookings " +
 				 "WHERE tno = " + tno;
-
 	}
 	
 	public static String removeTicket(String tno){
@@ -583,14 +570,21 @@ public class Queries {
 	}
 
 	//round trip query
-	public static String roundTrip(String src, String dst, String dep_date, String ret_date) {
+	public static String[] roundTrip(String src, String dst, String dep_date, String ret_date) {
+		String roundTripQuery = makeRoundTrip(src,dst, dep_date, ret_date);
+		String availableflights[] = createAvailableFlights();
+		String[] queryArray = {availableflights[0], availableflights[1], roundTripQuery};
 		
-		return "Select af1.src, af1.dst, af1.dep_date, af2.dep_date as ret_date, af1.price+af2.price as price " +
+		return queryArray;
+	}
+	
+	private static String makeRoundTrip(String src, String dst, String dep_date, String ret_date) {
+		return "Select af1.flightno as flightno1, af2.flightno as flightno2 af1.src as src, af1.dst as dst, af1.dep_date as dep_date, af2.dep_date as ret_date, af1.price+af2.price as price " +
 				 "From available_flights af1, available_flights af2 " +
 				 "Where to_char(af1.dep_date, 'DD/MM/YYYY')=' " + dep_date + "' And " +
 				 "to_char(af2.dep_date, 'DD/MM/YYYY')=' " + ret_date + "' And " +
 				 "af1.src = '"+src+ "' And af1.dst = '"+dst+ "' And af2.src='"+dst+ "' And af2.dst='"+src+ "'" +
-				 "Order By af1.price+af2.price ";
+				 "Order By af1.price+af2.price " ;
 	}
 	
 }
