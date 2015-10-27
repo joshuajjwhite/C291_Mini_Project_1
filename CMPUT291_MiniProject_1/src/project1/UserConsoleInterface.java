@@ -47,7 +47,7 @@ public class UserConsoleInterface {
 	}
 	
 	public void greet(){
-		sqlManager.setup();
+//		sqlManager.setup();
 		
 		selectMenuLoginOption();
 		mainCLI();
@@ -329,6 +329,7 @@ public class UserConsoleInterface {
 				HashMap<Integer, HashMap<String, String>> flightList = sqlManager.searchFlights(src, dst, dep_date, false, null, threeConn, sortConn);
 				if (flightList != null){
 					 displayFlights(flightList);
+					 return;
 				} else {
 					io.printf("No flights travel from given src to dst on specified date %n %n");
 					break; 
@@ -447,7 +448,7 @@ public class UserConsoleInterface {
 				//Insert ticket and booking
 				flightNo = flight.get("FLIGHTNO"  + Integer.toString(i));
 				sqlManager.addTicket(ticketNumber, userName, this.getCurrentUserEmail(), flight.get("PRICE"));
-				sqlManager.addBooking(ticketNumber, flightNo, flight.get("FARE" + Integer.toString(i)), flight.get("DEP_DATE"), seatString);
+				sqlManager.addBooking(ticketNumber, flightNo.trim(), flight.get("FARE" + Integer.toString(i)).trim(), flight.get("DEP_DATE").split("\\s+")[0], seatString);
 				
 				//Print ticket info:
 				io.printf("Your ticket number for flight %s is: %d. %n", flightNo, ticketNumber);
@@ -458,8 +459,6 @@ public class UserConsoleInterface {
 	public void listBookings(){
 		io.printf("List Bookings %n");
 		
-		HashMap<String, String> ticket;
-		
 		boolean loop = true;
 		while(loop) {
 			clearConsole();
@@ -467,27 +466,12 @@ public class UserConsoleInterface {
 			io.printf("############### %n");
 			
 			//content
-			HashMap<Integer, HashMap<String, String>> bookings = sqlManager.getBookings(getCurrentUserEmail());
-			if (bookings != null){
-//				io.printf("Booking %d %n", bookings.size());
-				for(int i=1; i<=bookings.size(); i++){	
-					ticket = bookings.get(i);
-					io.printf("Booking %d %n", i);
-					//TNO 2 FLIGHTNO AC027  FARE J  DEP_DATE 2015-10-23 00:00:00.0 SEAT 10A TNO 6 FLIGHTNO AC020  FARE Y  DEP_DATE 2015-12-22 00:00:00.0 SEAT 20B Ticket Selection 1: 
-					//the ticket number, the passenger name, the departure date and the price.
-					io.printf("Ticket Selection %d: %n", i);
-					io.printf("---------------------- %n");
-					io.printf("Ticket Number - %s %n", ticket.get("TNO"));
-					io.printf("Passenger - %s %n", ticket.get("NAME"));
-					io.printf("Departure Time - %s %n", ticket.get("DEP_DATE"));
-					io.printf("Price - %s %n %n", ticket.get("PRICE"));
-					ticket.clear();
-				}
-			} else {
-				io.printf("Issue Getting Bookings");
+			HashMap<String, String> bookings = sqlManager.getBookings(getCurrentUserEmail());
+			for(Entry<String, String> entry: bookings.entrySet()){
+				io.printf(entry.getValue() + "%n");
 			}
 			
-			io.printf("%n%nType Ticket Selection Number to select Booking %n"
+			io.printf("%n%nType \"(tno)\" to select Booking %n"
 					 + "B. Back %n"
 					 + "L. Logout %n");
 			 
@@ -501,7 +485,8 @@ public class UserConsoleInterface {
 					 break;
 				 default:
 					if ( bookings.containsKey(input) ) {
-					 selectBooking(bookings.get(Integer.valueOf(input)));
+					 String value = bookings.get(input);
+					 selectBooking(input, value);
 					} else {
 					 io.printf("Invalid Input %n %n");
 					 break;
@@ -509,21 +494,12 @@ public class UserConsoleInterface {
 			}
 		}
 	}
-	
-	public void selectBooking(HashMap<String, String> ticket){
-		//TNO 2 FLIGHTNO AC027  FARE J  DEP_DATE 2015-10-23 00:00:00.0 SEAT 10A Ticket 
+	public void selectBooking(String key, String value){
 		boolean loop = true;
 		while(loop){
-			io.printf("Selected Booking with tno %s%n", ticket.get("TNO"));
+			io.printf("Selected Booking with tno %s%n", key);
 			io.printf("###############################%n");
-
-			io.printf("---------------------- %n");
-			io.printf("Ticket Number - %s %n", ticket.get("TNO"));
-			io.printf("Passenger - %s %n", ticket.get("NAME"));
-			io.printf("Departure Time - %s %n", ticket.get("DEP_DATE"));
-			io.printf("Price - %s %n", ticket.get("PRICE"));
-			
-			
+			io.printf("Info: %s%n", value);
 			
 			io.printf("Type \"D\" to delete Booking %n"
 					 + "B. Back %n"
@@ -532,7 +508,7 @@ public class UserConsoleInterface {
 			String input = getInput().trim().toLowerCase();
 			switch (input){
 				case "d":
-					cancleBooking(ticket.get("TNO"));
+					cancleBooking(key);
 					loop = false;
 					break;
 				case "b":
@@ -645,7 +621,7 @@ public class UserConsoleInterface {
 						 if (Queries.getDate(dep_date) != null){
 							 try {
 								 sqlManager.updateArrival(flightNum, dep_date, act_arr_time);
-								 io.printf("Arrival time has been updated %n %n");
+
 								 break;
 							 } catch (Exception e) {
 								 successfulInput = false;

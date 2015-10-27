@@ -12,8 +12,13 @@ public class SqlManager {
 	TextDevice io;
 	
 	public SqlManager(TextDevice io){
-		sqlDB = new JdbcSQL();
+
 		this.io = io;
+		io.printf("Provide SQLPLUS username: ");
+		String user = io.readLine().trim();
+		io.printf("Provide SQLPLUS password: ");
+		String pass = String.valueOf(io.readPassword());
+		sqlDB = new JdbcSQL(user, pass);
 	}
 	
 	public ResultSet queryWrapper(String[] stmts){
@@ -80,57 +85,44 @@ public class SqlManager {
 	      		
 			}
 		} catch (Exception e) {
-			io.printf("Error getting boat names %s %n", e);
+			io.printf("Error searching Flights %s %n", e);
 		}
 		
 		return flights;
 	}
 	
 	
-	public HashMap<Integer, HashMap<String, String>> getBookings(String email){
+	public HashMap<String, String> getBookings(String email){
 		String tno;
 		String dep_date;
+		String name = "";
 		String price = "";
-		Integer ticketCounter = 0;
 		
 		ResultSet rs = sqlDB.executeQuery(Queries.getUserBookings(email));
-		HashMap<Integer, HashMap<String, String>> tickets = new HashMap<Integer, HashMap<String, String>>();
-		HashMap<String, String> ticketInfo = new HashMap<String, String>();
+		HashMap<String, String> bookings = new HashMap<String, String>();
 		try{
 			while(rs.next()){
-			    
-			    ticketCounter ++;
-
-				tno = String.valueOf(rs.getInt("TNO"));
+				tno = String.valueOf(rs.getInt("tno"));
 				dep_date = String.valueOf(rs.getString("dep_date"));
 				
 				ResultSet rs_tickets = sqlDB.executeQuery(Queries.checkTicket(tno));
-
 				while(rs_tickets.next()){
-	
-					ResultSetMetaData rsetMD = rs_tickets.getMetaData();
-				    int columnCount = rsetMD.getColumnCount();
-
-
-		      		for (int c=1; c<=columnCount; c++){
-						String name = rsetMD.getColumnLabel(c); // get column name
-						Object o = rs_tickets.getObject(c); // get content at that index
-						String value="null";
-						if (o!=null) {
-							value = o.toString();
-		     		 	}
-						
-						ticketInfo.put(name, value);
-						io.printf("%s %s %n", name, value);
-		      		}
+					name = String.valueOf(rs_tickets.getString("name")).trim();
+					price = String.valueOf(rs_tickets.getFloat("paid_price"));
+					
 				}
-		      	tickets.put(ticketCounter, ticketInfo);
-
+				String s = "tno: " + tno + ", passenger: " + name + ", departure date: " + dep_date +
+						", price: " + price;
+				bookings.put(tno, s);
+//				io.printf("tno: %s, passenger: %s, departure date: %s, price: %s ", tno, name, dep_date, price);
+				
+				
+				//+ " " + rs.getString("fare") + String.valueOf(rs.getDate("dep_date")) + " " + rs.getString("seat");
 			}
-			return tickets;
+			return bookings;
 		} catch (Exception e){
 			io.printf("Issue getting bookings %n", e);
-			return null;
+			return bookings;
 		}
 	}
 	
@@ -356,6 +348,7 @@ public class SqlManager {
 	
 	public void updateArrival(String flightNum, String dep_time, String act_arr_time){
 		sqlDB.sendCommand(Queries.recordArrival(flightNum.toUpperCase(), Queries.getDate(dep_time), act_arr_time));
+		
 	}
 	
 	public boolean checkPassengers(String email, String name) {

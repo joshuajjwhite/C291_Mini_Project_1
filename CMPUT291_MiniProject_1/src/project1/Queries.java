@@ -227,7 +227,7 @@ public class Queries {
 	public static String getDate(String indate){
 		//used to synthesize a date from user and output it in a way we can parse with
 		
-	SimpleDateFormat df = new SimpleDateFormat( "dd-MMM-yyyy");
+	SimpleDateFormat df = new SimpleDateFormat("dd-MMM-yyyy");
 		
 		Calendar cal = Calendar.getInstance();
 		try {
@@ -437,7 +437,7 @@ public class Queries {
 			 			 "' and gc.src='" + src +
 			 			 "' and gc.dst='" + dst + "' " +
 					 "union " +
-			 			 "select flightno, '' flightno2, src, dst, dep_date, to_char(arr_time, 'hh24:mi') as arr_time, 0 stops, 0 layover, price, fare, '' fare2 to_char(seats) " +
+			 			 "select flightno, '' flightno2, src, dst, dep_date, to_char(arr_time, 'hh24:mi') as arr_time, 0 stops, 0 layover, price, fare, '' fare2, to_char(seats) " +
 			 			 "from available_flights " +
 			 			 "where to_char(dep_date,'DD-Mon-YYYY')='" + dep_date + 
 			 			 "' and src='" + src + "' " +
@@ -475,7 +475,7 @@ public class Queries {
 		//bookings(tno, flightno, fare, dep_date, seat)
 			return "INSERT into bookings values(" +
 				tno + ", '" + flightno + "', '" + fare + "', " +
-				 "TO_DATE('" +dep_date+ "', 'DD-MON-YYYY') " + ", '" + seat + "')" ;
+				 "(TO_DATE('" +dep_date+ "', 'YYYY-MM-DD')) " + ", '" + seat + "')" ;
 	}
 	
 	public static String checkTicket(String tno) {
@@ -548,7 +548,7 @@ public class Queries {
 	 		"WHERE dep_date = (TO_DATE('" + dep_date + "', 'DD-MON-YY')) and flightno = '" + flightno + "'";
 		}
 		
-		else{
+		else{ 
 
 			return "UPDATE sch_flights " +
 				 "SET act_dep_time = (TO_DATE('" + time + "', 'HH24:MI')) " +
@@ -587,7 +587,7 @@ public class Queries {
 	}
 	
 	private static String makeRoundTrip(String src, String dst, String dep_date, String ret_date) {
-		return "Select af1.flightno as flightno1, af2.flightno as flightno2 af1.src as src, af1.dst as dst, af1.dep_date as dep_date, af2.dep_date as ret_date, af1.price+af2.price as price " +
+		return "Select af1.flightno as flightno1, af2.flightno as flightno2, af1.src as src, af1.dst as dst, af1.dep_date as dep_date, af2.dep_date as ret_date, af1.price+af2.price as price " +
 				 "From available_flights af1, available_flights af2 " +
 				 "Where to_char(af1.dep_date, 'DD/MM/YYYY')=' " + dep_date + "' And " +
 				 "to_char(af2.dep_date, 'DD/MM/YYYY')=' " + ret_date + "' And " +

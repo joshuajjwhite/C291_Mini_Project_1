@@ -9,13 +9,32 @@ public class JdbcSQL {
 	
 	String m_url = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
 	String m_driverName = "oracle.jdbc.driver.OracleDriver";
-	String m_username = "anplamon";
-	String m_password = "Doubld00)m";
+	String m_username = "";
+	public String getM_username() {
+		return m_username;
+	}
+
+	public void setM_username(String m_username) {
+		this.m_username = m_username;
+	}
+
+	public String getM_password() {
+		return m_password;
+	}
+
+	public void setM_password(String m_password) {
+		this.m_password = m_password;
+	}
+
+
+	String m_password = "";
 	
 	Connection m_con;
 			
 	
-	public JdbcSQL(){
+	public JdbcSQL(String username, String pass){
+		this.setM_username(username);
+		this.setM_password(pass);
 		loadTheDriver();
 	}
 	
