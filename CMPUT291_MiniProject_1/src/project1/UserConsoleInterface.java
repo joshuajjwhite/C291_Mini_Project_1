@@ -296,7 +296,7 @@ public class UserConsoleInterface {
 
 			
 			io.printf("Are you looking for round trip? (Y/N) %n");
-			if (getInput().toLowerCase().equals("Y")){
+			if (getInput().toLowerCase().equals("y")){
 				dateSuccess = false;
 				while(!dateSuccess){
 					io.printf("Enter Flight Return Date (dd-MMM-yyyy ex: 22-Dec-2015) %n");
@@ -461,6 +461,8 @@ public class UserConsoleInterface {
 	public void listBookings(){
 		io.printf("List Bookings %n");
 		
+		HashMap<String, String> ticket;
+		
 		boolean loop = true;
 		while(loop) {
 			clearConsole();
@@ -468,12 +470,27 @@ public class UserConsoleInterface {
 			io.printf("############### %n");
 			
 			//content
-			HashMap<String, String> bookings = sqlManager.getBookings(getCurrentUserEmail());
-			for(Entry<String, String> entry: bookings.entrySet()){
-				io.printf(entry.getValue() + "%n");
+			HashMap<Integer, HashMap<String, String>> bookings = sqlManager.getBookings(getCurrentUserEmail());
+			if (bookings != null){
+				for(int i=1;i<=bookings.size();i++){
+					ticket = bookings.get(i);
+					
+					//the ticket number, the passenger name, the departure date and the price.
+					io.printf("Ticket Selection %d: %n", i);
+					io.printf("---------------------- %n");
+					io.printf("Ticket Number - %s %n", ticket.get("TNO"));
+					io.printf("Passenger - %s %n", ticket.get("NAME"));
+					io.printf("Departure Time - %s %n", ticket.get("DEP_DATE"));
+					io.printf("Price - %s %n", ticket.get("PRICE"));
+	
+					
+					io.printf("%n %n");
+				}
+			} else {
+				io.printf("Issue Getting Bookings");
 			}
 			
-			io.printf("%n%nType \"(tno)\" to select Booking %n"
+			io.printf("%n%nType Ticket Selection Number to select Booking %n"
 					 + "B. Back %n"
 					 + "L. Logout %n");
 			 
@@ -487,8 +504,7 @@ public class UserConsoleInterface {
 					 break;
 				 default:
 					if ( bookings.containsKey(input) ) {
-					 String value = bookings.get(input);
-					 selectBooking(input, value);
+					 selectBooking(bookings.get(Integer.valueOf(input)));
 					} else {
 					 io.printf("Invalid Input %n %n");
 					 break;
@@ -497,12 +513,20 @@ public class UserConsoleInterface {
 		}
 	}
 	
-	public void selectBooking(String key, String value){
+	public void selectBooking(HashMap<String, String> ticket){
+		//TNO 2 FLIGHTNO AC027  FARE J  DEP_DATE 2015-10-23 00:00:00.0 SEAT 10A Ticket 
 		boolean loop = true;
 		while(loop){
-			io.printf("Selected Booking with tno %s%n", key);
+			io.printf("Selected Booking with tno %s%n", ticket.get("TNO"));
 			io.printf("###############################%n");
-			io.printf("Info: %s%n", value);
+
+			io.printf("---------------------- %n");
+			io.printf("Ticket Number - %s %n", ticket.get("TNO"));
+			io.printf("Passenger - %s %n", ticket.get("NAME"));
+			io.printf("Departure Time - %s %n", ticket.get("DEP_DATE"));
+			io.printf("Price - %s %n", ticket.get("PRICE"));
+			
+			
 			
 			io.printf("Type \"D\" to delete Booking %n"
 					 + "B. Back %n"
@@ -511,7 +535,7 @@ public class UserConsoleInterface {
 			String input = getInput().trim().toLowerCase();
 			switch (input){
 				case "d":
-					cancleBooking(key);
+					cancleBooking(ticket.get("TNO"));
 					loop = false;
 					break;
 				case "b":
