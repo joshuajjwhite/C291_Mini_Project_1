@@ -35,31 +35,24 @@ public class SqlManager {
 		this.insertData();
 	}
 	
-	public HashMap<Integer, HashMap<String, String>> searchFlights(String src, String dst, String dep_date){
+	public HashMap<Integer, HashMap<String, String>> searchFlights(String src, String dst, String dep_date, boolean roundTrip, String ret_date, boolean threeConn, boolean orderByConn){
 		// good_connections(src,dst,dep_date,flightno1,flightno2, layover,price)
 		//available_flights(flightno, dep_date, src , dst, dep_time, arr_time, fare, seats,price)
-		//io.printf("%d %n", src.length());
-		//io.printf("%d %n", dst.length());
-		
-		//io.printf("%s %n", src);
-		//io.printf("%s %n", dst);
-		//io.printf("%s %n", dep_date);
+
 		HashMap<Integer, HashMap<String, String>> flights = new HashMap<Integer, HashMap<String, String>>();
 		HashMap<String, String> flight = new HashMap<String, String>();
-		String[] stmts = Queries.searchFlight(src.toUpperCase(), dst.toUpperCase(), dep_date, false, false);
-		String flightNo = "Oops";
-		String sourceAcode = "Oops";
-		String dstAcode = "Oops";
-		String dep_time = "Oops";
-		String arr_time = "Oops";
-		String numStops = "Oops";
-		String price = "Oops";
-		String seats = "Oops";
-		Integer flightCounter = 0 ;
 		
-		//heres the error (--Joshua)
+//		String roundTrip(String src, String dst, String dep_date, String ret_date)
+		
+		String[] stmts = null;
+		if(roundTrip){
+			stmts = Queries.roundTrip(src.toUpperCase(), dst.toUpperCase(), dep_date, ret_date), "";
+		} else {
+			stmts = Queries.searchFlight(src.toUpperCase(), dst.toUpperCase(), dep_date, threeConn, orderByConn);
+		}
+		
+		Integer flightCounter = 0 ;
 		ResultSet rs = null;
-//		for (String stmt: stmts[0:stmts.length-1]){
 		for (int i = 0; i < stmts.length-1; i++){
 			rs = sqlDB.executeQuery(stmts[i]);
 		}
@@ -256,11 +249,11 @@ public class SqlManager {
 				
 				try {
 					ar.add(rs.getString("CITY"));
+
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-				
+				}	
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -270,8 +263,6 @@ public class SqlManager {
 		
 		
 		return ar;
-		
-		
 	}
 	
 	public ArrayList<String> searchName(String s){
@@ -279,36 +270,50 @@ public class SqlManager {
 		ArrayList<String> ar = new ArrayList<String>();
 		try {
 			while(rs.next()){
-				
 				try {
 					ar.add(rs.getString("NAME"));
+
 
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
 		return ar;
-		
-		
+	}
+	
+	public String isThisWhatYouWanted(String s){
+		ResultSet rs = sqlDB.executeQuery(Queries.searchCities(s));
+		ArrayList<String> ar = new ArrayList<String>();
+		try {
+			while(rs.next()){
+				try {
+					return rs.getString("CITY") + " - " + rs.getString("NAME");
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
 	}
 	
 	public String getAcodeByCity(String city){
 		
 		ResultSet rs = sqlDB.executeQuery(Queries.searchAcodeByCity(city));
 		try {
+			rs.next();
 			return rs.getString("ACODE");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			io.printf("Error getting AcodeByCity %s", e);
+//			e.printStackTrace();
 		}
 		
 		return null;
