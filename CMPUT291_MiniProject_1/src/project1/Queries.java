@@ -358,13 +358,13 @@ public class Queries {
 
 		 String gc[] = { "drop view good_connections2 ",
 				 
- 				 "create view good_connections2(src,dst,dep_date,flightno1,flightno2, arr_time, layover, price, seats) " +
+ 				 "create view good_connections2(src,dst,dep_date,flightno1,flightno2, arr_time, layover, price, fare1, fare2, seats) " +
  				 "as select " +
  				 "a1.src, a2.dst, a1.dep_date, a1.flightno, a2.flightno, to_char(a2.arr_time, 'hh24:mi'), " + 
- 				 "a2.dep_time-a1.arr_time, min(a1.price+a2.price), a1.seats || ', ' || a2.seats " +
+ 				 "a2.dep_time-a1.arr_time, min(a1.price+a2.price), a1.fare, a2.fare, a1.seats || ', ' || a2.seats " +
  				 "from available_flights a1, available_flights a2 " +
  				 "where a1.dst=a2.src and a2.dep_time - a1.arr_time >= 1.5/24 and a2.dep_time - a1.arr_time <= 5/24 " +
- 				 "group by a1.src, a2.dst, a1.dep_date, a2.arr_time, a1.seats, a2.seats, a1.flightno, a2.flightno, a2.dep_time, a1.arr_time "};
+ 				 "group by a1.src, a2.dst, a1.dep_date, a2.arr_time, a1.seats, a2.seats, a1.flightno, a1.fare, a2.flightno, a2.fare, a2.dep_time, a1.arr_time "};
 		 
 		 return gc;
 
@@ -373,17 +373,17 @@ public class Queries {
 	private static String[] createGoodConnections3(){
 		String gc[] = { "drop view good_connections3 ",
 				 
- 				 "create view good_connections3(src,dst,dep_date, flightno1, flightno2, flightno3, arr_time, layover1, layover2, price, seats) " +
+ 				 "create view good_connections3(src,dst,dep_date, flightno1, flightno2, flightno3, arr_time, layover1, layover2, price, fare1, fare2, fare3, seats) " +
  				 "as select " +
 
  				 "a1.src, a3.dst, a1.dep_date, a1.flightno, a2.flightno, a3.flightno, to_char(a3.arr_time, 'hh24:mi'), " +
- 				 "a2.dep_time-a1.arr_time, a3.dep_time-a2.arr_time, min(a1.price+a2.price+a3.price), a1.seats || ', ' || a2.seats || ', ' || a3.seats " +
+ 				 "a2.dep_time-a1.arr_time, a3.dep_time-a2.arr_time, min(a1.price+a2.price+a3.price), a1.fare, a2.fare, a3.fare, a1.seats || ', ' || a2.seats || ', ' || a3.seats " +
 
  				 "from available_flights a1, available_flights a2, availableflights a3 " +
 
  				 "where a1.dst=a2.src and a2.dst = a3.src and a2.dep_time - a1.arr_time >= 1.5/24 and a2.dep_time - a1.arr_time <= 5/24 and a3.dep_time - a2.arr_time >= 1.5/24 and a3.dep_time - a2.arr_time <= 5/24 " +
 
- 				 "group by a1.src, a3.dst, a1.dep_date, a3.arr_time, a1.seats, a2.seats, a3.seats, a1.flightno, a2.flightno, a3.flightno, a3.dep_time, a2.arr_time, a2.dep_time, a1.arr_time "};
+ 				 "group by a1.src, a3.dst, a1.dep_date, a3.arr_time, a1.seats, a2.seats, a3.seats, a1.flightno, a1.fare, a2.flightno, a2.fare, a3.flightno, a3.fare, a3.dep_time, a2.arr_time, a2.dep_time, a1.arr_time "};
 		 
 		 return gc;
 
@@ -391,23 +391,23 @@ public class Queries {
 	
 	private static String getGoodFlights3(String dep_date, String src, String dst, Boolean orderbystops){ 
 
-		String ggf = "select flightno1, flightno2, flightno3, src, dst, dep_date, arr_time, stops, layover1, layover2, price, seats " + 
+		String ggf = "select flightno1, flightno2, flightno3, src, dst, dep_date, arr_time, stops, layover1, layover2, price, fare1, fare2, fare3, seats " + 
 		 		 "from ( " +
-			 		 "select flightno1, flightno2, flightno3, src, dst, dep_date, arr_time, stops, layover, price, seats " + 
+			 		 "select flightno1, flightno2, flightno3, src, dst, dep_date, arr_time, stops, layover, price, fare1, fare2, fare3, seats " + 
 			 		 "from " + 
-			 			 "(select gc3.flightno1, gc3.flightno2, gc3.flightno3, gc3.src, gc3.dst, gc3.dep_date, to_char(gc3.arr_time, 'hh24:mi') as arr_time, 2 stops, gc3.layover1, gc3.layover2, gc3.price, gc3.seats " +
+			 			 "(select gc3.flightno1, gc3.flightno2, gc3.flightno3, gc3.src, gc3.dst, gc3.dep_date, to_char(gc3.arr_time, 'hh24:mi') as arr_time, 2 stops, gc3.layover1, gc3.layover2, gc3.price, gc3.fare1, gc3.fare2, gc3.fare3, gc3.seats " +
 			 			 "From good_connections3 gc3 " +
 			 			 "where to_char(gc.dep_date,'DD-Mon-YYYY')= '" + dep_date + 
 			 			 "' and gc.src='" + src +
 			 			 "' and gc.dst='" + dst + "'" +
 					 "union " +
-			 			 "select gc.flightno1, gc.flightno2, '' flightno3, gc.src, gc.dst, gc.dep_date, to_char(gc.arr_time, 'hh24:mi') as arr_time, 1 stops, gc.layover, gc..price, gc.seats " +
+			 			 "select gc.flightno1, gc.flightno2, '' flightno3, gc.src, gc.dst, gc.dep_date, to_char(gc.arr_time, 'hh24:mi') as arr_time, 1 stops, gc.layover, gc.price, gc.fare1, gc.fare2, '' fare3, gc.seats " +
 			 			 "from good_connections2 gc " +
 			 			 "where to_char(gc.dep_date,'DD-Mon-YYYY')= '" + dep_date + 
 			 			 "' and gc.src='" + src +
 			 			 "' and gc.dst='" + dst + "'" +
 					 "union " +
-			 			 "select flightno, '' flightno2, '' flightno3, src, dst, dep_date, to_char(arr_time, 'hh24:mi') as arr_time, 0 stops, 0 layover, price, to_char(seats) " +
+			 			 "select flightno, '' flightno2, '' flightno3, src, dst, dep_date, to_char(arr_time, 'hh24:mi') as arr_time, 0 stops, 0 layover, price, fare, '' fare2, '' fare3, to_char(seats) " +
 			 			 "from available_flights " +
 			 			 "where to_char(dep_date,'DD-Mon-YYYY')='" + dep_date + 
 			 			 "' and src='" + src + "' " +
@@ -427,17 +427,17 @@ public class Queries {
 	private static String getGoodFlights2(String dep_date, String src, String dst, Boolean orderbystops){
 
 
-		String ggf = "select flightno1, flightno2, src, dst, dep_date, arr_time , stops, layover, price, seats " + 
+		String ggf = "select flightno1, flightno2, src, dst, dep_date, arr_time , stops, layover, price, fare1, fare2, seats " + 
 		 		 "from ( " +
-			 		 "select flightno1, flightno2, src, dst, dep_date, arr_time, stops, layover, price, seats " + 
+			 		 "select flightno1, flightno2, src, dst, dep_date, arr_time, stops, layover, price, fare1, fare2, seats " + 
 			 		 "from " + 
-			 			 "(select gc.flightno1, gc.flightno2, gc.src, gc.dst, gc.dep_date, to_char(gc.arr_time, 'hh24:mi') as arr_time, 1 stops, gc.layover, gc.price, gc.seats " +
+			 			 "(select gc.flightno1, gc.flightno2, gc.src, gc.dst, gc.dep_date, to_char(gc.arr_time, 'hh24:mi') as arr_time, 1 stops, gc.layover, gc.price, fare1, fare2, gc.seats " +
 			 			 "from good_connections2 gc " +
 			 			 "where to_char(gc.dep_date,'DD-Mon-YYYY')= '" + dep_date + 
 			 			 "' and gc.src='" + src +
 			 			 "' and gc.dst='" + dst + "' " +
 					 "union " +
-			 			 "select flightno, '' flightno2, src, dst, dep_date, to_char(arr_time, 'hh24:mi') as arr_time, 0 stops, 0 layover, price, to_char(seats) " +
+			 			 "select flightno, '' flightno2, src, dst, dep_date, to_char(arr_time, 'hh24:mi') as arr_time, 0 stops, 0 layover, price, fare, '' fare2 to_char(seats) " +
 			 			 "from available_flights " +
 			 			 "where to_char(dep_date,'DD-Mon-YYYY')='" + dep_date + 
 			 			 "' and src='" + src + "' " +

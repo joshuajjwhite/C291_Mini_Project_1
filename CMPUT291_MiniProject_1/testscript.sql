@@ -251,11 +251,11 @@ create view available_flights(flightno, dep_date, src, dst, dep_time, arr_time, 
 
 
 drop view good_connections;
-create view good_connections (src,dst,dep_date,flightno1,flightno2, arr_time, layover,price,seats) as
-	select a1.src, a2.dst, a1.dep_date, a1.flightno, a2.flightno, to_char(a2.arr_time, 'hh24:mi'), a2.dep_time-a1.arr_time, min(a1.price+a2.price), a1.seats || ', ' || a2.seats 
+create view good_connections (src,dst,dep_date,flightno1,flightno2, arr_time, layover,price, fare1, fare2, seats) as
+	select a1.src, a2.dst, a1.dep_date, a1.flightno, a2.flightno, to_char(a2.arr_time, 'hh24:mi'), a2.dep_time-a1.arr_time, min(a1.price+a2.price), a1.fare, a2.fare, a1.seats || ', ' || a2.seats 
   	from available_flights a1, available_flights a2
   	where a1.dst=a2.src and a2.dep_time - a1.arr_time >= 1.5/24 and a2.dep_time - a1.arr_time <= 5/24
-  	group by a1.src, a2.dst, a1.dep_date, a2.arr_time, a1.seats, a2.seats, a1.flightno, a2.flightno, a2.dep_time, a1.arr_time ;
+  	group by a1.src, a2.dst, a1.dep_date, a2.arr_time, a1.seats, a2.seats, a1.flightno, a1.fare, a2.flightno, a2.fare, a2.dep_time, a1.arr_time ;
 
 
 
@@ -265,17 +265,17 @@ create view good_connections (src,dst,dep_date,flightno1,flightno2, arr_time, la
 
 
 
-select flightno1, flightno2, src, dst, dep_date, arr_time , stops, layover, price, seats  
+select flightno1, flightno2, src, dst, dep_date, arr_time , stops, layover, price, fare1, fare2, seats  
 	from ( 
- 	select flightno1, flightno2, src, dst, dep_date, arr_time, stops, layover, price, seats   
+ 	select flightno1, flightno2, src, dst, dep_date, arr_time, stops, layover, price, fare1, fare2, seats   
 		from  
-  		(select gc.flightno1, gc.flightno2, gc.src, gc.dst, gc.dep_date, to_char(gc.arr_time, 'hh24:mi') as arr_time, 1 stops, gc.layover, gc.price, gc.seats 
+  		(select gc.flightno1, gc.flightno2, gc.src, gc.dst, gc.dep_date, to_char(gc.arr_time, 'hh24:mi') as arr_time, 1 stops, gc.layover, gc.price,gc.fare1, gc.fare2, gc.seats 
 		from good_connections gc
   		where to_char(gc.dep_date, 'DD-Mon-YYYY')= '22-Dec-2015'  
 			and gc.src=  'YEG'
 	  		and gc.dst=  'YYZ'     
 	union 
-		select flightno, '' flightno2, src, dst, dep_date, to_char(arr_time, 'hh24:mi') as arr_time, 0 stops, 0 layover, price, to_char(seats) 
+		select flightno, '' flightno2, src, dst, dep_date, to_char(arr_time, 'hh24:mi') as arr_time, 0 stops, 0 layover, price, fare, '' fare2, to_char(seats) 
 		from available_flights 
 		where to_char(dep_date, 'DD-Mon-YYYY')= '22-Dec-2015'  
 			and src=  'YEG'
