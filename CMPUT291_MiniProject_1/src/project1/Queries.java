@@ -7,11 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import textDevicePackage.TextDevice;
-import textDevicePackage.TextDevices;
-
 public class Queries {
-	private final static TextDevice io = TextDevices.defaultTextDevice();
 	
 	public static String[] dropTables(){
 		
