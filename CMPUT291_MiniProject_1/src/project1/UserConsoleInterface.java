@@ -1,7 +1,7 @@
 package project1;
 
 import java.sql.ResultSet;
-
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.HashMap;
@@ -412,19 +412,49 @@ public class UserConsoleInterface {
 		}
 		
 		//Give them a ticket and add a booking.
-		Integer ticketNumber;
+		Integer ticketNumber = 0;
+		Integer seatNumber = 0;
+		String seatString = "";
+		String flightNo = "";
 		Boolean validTicketNumber = false;
+		Boolean validSeatNumber = false;
 		Random randomGenerator = new Random();
 		
 		for (int i = 1; i <= 3; i++) {
-			while (!validTicketNumber) {
-				ticketNumber = randomGenerator.nextInt(2147483647);
-				if(sqlManager.checkTicket(ticketNumber)) { validTicketNumber = true; }
+			if(flight.containsKey("FLIGHTNO" + Integer.toString(i)) && flight.get("FLIGHTNO"  + Integer.toString(i))!="null") {
+				while (!validTicketNumber) {
+					ticketNumber = randomGenerator.nextInt(2147483647);
+					if(!sqlManager.checkTicket(ticketNumber)) { validTicketNumber = true; }
+				}
+				
+				while (!validSeatNumber) {
+					seatNumber = randomGenerator.nextInt(99);
+					seatString = seatNumber.toString() +'A';
+					if(!sqlManager.checkSeat(seatString)) { 
+						validSeatNumber = true; 
+					}
+					else {
+						seatString = seatNumber.toString() +'B';
+						if(!sqlManager.checkSeat(seatString)) { 
+							validSeatNumber = true; 
+						}
+					}
+					
+				}
+				
+				//Insert ticket and booking
+				flightNo = flight.get("FLIGHTNO"  + Integer.toString(i));
+				sqlManager.addTicket(ticketNumber, userName, this.getCurrentUserEmail(), flight.get("PRICE"));
+				try {
+					sqlManager.addBooking(ticketNumber, flightNo, sqlManager.getFareType(flightNo), flight.get("DEP_DATE"), seatString);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				//Print ticket info:
+				io.printf("Your ticket number for flight %s is: %d. %n", flightNo, ticketNumber);
 			}
-			
-			//Insert ticket and booking	io.printf("LAYOVER TIME - %s %n", flight.get("LAYOVER1")); //DO MATH FOOL AND CONDITIONALS YO
-			//sqlManager.addTicket(ticketNumber, userName, this.getCurrentUserEmail(), flight.get("PRICE"));
-			//sqlManager.addBooking(ticketNumber, flightno, fare, flight.get("DEP_DATE"), seat);
 		}
 	}
 	

@@ -454,7 +454,9 @@ public class Queries {
 	}
 
 	public static String getFare(String flightNo) {
-		return "";
+		return 	"Select fare " +
+				"From flight_fares " +
+				"Where flightNo = '" + flightNo +"'";
 	}
 	
 	public static String checkPassengers(String email, String name){
@@ -465,7 +467,7 @@ public class Queries {
 	}
 
 	public static String addPassenger(String email, String name, String country){
-		return "INSERT into passengers values(" +
+		return "INSERT into passengers values('" +
 				email + "', ' " + name + "', ' " + country + "') " ;
 	}
 
@@ -476,7 +478,7 @@ public class Queries {
 				 "to_date('" +dep_date+ "', 'DD-Mon-YYYY') " + ", " + seat + ")" ;
 	}
 	
-	public static String checkTicket(String tno){
+	public static String checkTicket(String tno) {
 		//used to see if the randomly generated ticketno is already used.
 		//should return empty then the ticketno can be used
 		return "Select * " +
@@ -484,9 +486,15 @@ public class Queries {
 				 "Where tno = " + tno;
 	}
 
+	public static String checkSeat(String seat) {
+		return  "Select seat " +
+				"From bookings " +
+				"Where seat = '" + seat + "'";
+	}
+	
 	public static String addTicket(String tno,String name,String email,String paid_price){
 		//tickets(tno, name, email, paid_price)
-			return "INSERT into tickets values( " +
+			return "INSERT into tickets values(" +
 				tno + ", '" + name + "', '" + email + "', " + paid_price + ") " ; 
 			
 	}

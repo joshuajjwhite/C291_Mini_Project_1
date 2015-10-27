@@ -46,7 +46,7 @@ public class SqlManager {
 		
 		String[] stmts = null;
 		if(roundTrip){
-			stmts = Queries.roundTrip(src.toUpperCase(), dst.toUpperCase(), dep_date, ret_date), "";
+			stmts = Queries.roundTrip(src.toUpperCase(), dst.toUpperCase(), dep_date, ret_date);
 		} else {
 			stmts = Queries.searchFlight(src.toUpperCase(), dst.toUpperCase(), dep_date, threeConn, orderByConn);
 		}
@@ -369,6 +369,18 @@ public class SqlManager {
 		return true; 
 	}
 	
+	public boolean checkSeat(String seat) {
+		ResultSet rs = sqlDB.executeQuery(Queries.checkSeat(seat));
+		try{
+			if(!rs.isBeforeFirst()){
+				return false;
+			}
+		} catch (Exception e){
+			io.printf("checkTicket failed %s", e);
+		}
+		return true; 
+	}
+	
 	public void addPassenger(String email, String name, String country) {
 		sqlDB.sendCommand(Queries.addPassenger(email, name, country));
 	}
@@ -379,5 +391,14 @@ public class SqlManager {
 	
 	public void addBooking(Integer ticketNumber, String flightno, String fare, String dep_date, String seat) {
 		sqlDB.sendCommand(Queries.addBooking(ticketNumber.toString(), flightno, fare, dep_date, seat));
+	}
+	
+	public String getFareType(String flightNo) throws SQLException {
+		ResultSet rs = sqlDB.executeQuery(Queries.getFare(flightNo));
+		Object o = rs.getObject(0);
+		if (o!=null) {
+			return o.toString();
+		}
+		return "";
 	}
 }
