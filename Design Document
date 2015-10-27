@@ -1,3 +1,17 @@
+UA Travel Java Application with SQL
+Group:
+	-Aaron Plamondon: aaplamon
+	-Quentin Lautischer: lautischer
+	-Joshua White: jjwhite
+
+GitHub repo: https://github.com/joshuajjwhite/C291_Mini_Project_1
+
+Resources:
+	-Stack Overflow
+	-Oracle Documentation
+	-Assingment two posted solutions
+	-http://www.techonthenet.com
+
 1) General Overview and User Guide
 	General Overview:
 	When the program is first run, the user will be prompted to either register an account, login with an existing account, or exit the program. If the user decides to create a new account, then they will be prompted to enter in their email address and password. Once a valid email and password has been entered, the user will be brought to the airport main menu page. If the user already has an account, then they will simply log into the system by typing in their email and password. On the main page, the user will be able to search and book a flight, as well as view a list of existing bookings. If the user is an airline agent, they will also be able to record the flight departure time and the flight arrival time. 
@@ -24,16 +38,29 @@
 4) Group-work Breakdown Strategy
 	
 	Aaron:
-		- Implemented "round trip" functionality
-		- Assisted in solving runtime issues of the SQL queries
-		- Main editor of documentation
+		- Implemented "round trip" functionality: 2 hours to make Querey 
+		- Main editor of documentation: 2 hours
 
 	Quentin
-		- Created user interface
-		- Created how the program parses the return of Queries
+		- Created user interface, run sequence: 4 hour
+		- Created how the program parses the return of Queries: 3 hour
 
 	Josh
 
-		- Created majority of Query base
-		- Support, add and check Queries
-		- Implemented multiple "connecting flights" functionality 
+		- Created majority of Query base: 3 hour
+		- Support, add and check Queries: 0.5 hour
+		- Implemented multiple "connecting flights" functionality: 1 hour
+			.Many Queries were simple to make becuase they were very simple check and fetch Queries.
+			.The bigger Queries for main functionality were edited versions of the Assignment two solutions
+	
+	Group
+		- Spent lots of group time together integrating parts: 5 hours
+		- Ironing out bugs : 5 hours
+		- Fixing user interfaces: 5 hours
+			.A majority of time of this project was spent together working on the project as a whole
+			.We each had responsible parts seperately and most time was spent sewing the pieces together
+			.Into something that works well.  The individual pieces were spilit as stated above.  The finished
+			.project is a result of our collective effort.
+			.Our approach was as Quentin built the user interface, Joshua and Aaron would build the support Queries and functions
+			.that Quentin required to make the build function.
+			
