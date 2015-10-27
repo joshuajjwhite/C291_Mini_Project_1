@@ -549,13 +549,13 @@ public class Queries {
 
 		return "UPDATE sch_flights " +
 				 "SET act_dep_time = SYSDATE " +
-				 "WHERE dep_date = 'TO_DATE('" + dep_date + "', 'dd-MMM-yyyy')' and flightno = '" + flightno + "'";
+				 "WHERE dep_date = (TO_DATE('" + dep_date + "', 'DD-MON-YYYY')) and flightno = '" + flightno + "'";
 		}
 
 		else{
 
 			return "UPDATE sch_flights " +
-				 "SET act_dep_time = to_date('" + time + "', 'hh24:mi') " +
+				 "SET act_dep_time = (TO_DATE('" + time + "', 'HH24:MI')) " +
 				 "WHERE dep_date = '" + dep_date + "' and flightno = '" + flightno + "'";
 
 		}
@@ -569,13 +569,13 @@ public class Queries {
 
 		return "UPDATE sch_flights " +
 				 "SET act_arr_time = SYSDATE " +
-				 "WHERE dep_date = 'TO_DATE('" + dep_date + "', 'dd-MMM-yyyy') and flightno = " + flightno;
+				 "WHERE dep_date = (TO_DATE('" + dep_date + "', 'DD-MON-YYYY')) and flightno = " + flightno;
 		}
 
 		else{
 
 			return "UPDATE sch_flights " +
-				 "SET act_arr_time = to_date('" + time + "', 'hh24:mi') " +
+				 "SET act_arr_time = (TO_DATE('" + time + "', 'HH24:MI')) " +
 				 "WHERE dep_date = '" + dep_date + "' and flightno = " + flightno;
 
 		}
