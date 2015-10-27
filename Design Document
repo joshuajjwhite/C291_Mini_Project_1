@@ -17,10 +17,12 @@ Resources:
 	When the program is first run, the user will be prompted to either register an account, login with an existing account, or exit the program. If the user decides to create a new account, then they will be prompted to enter in their email address and password. Once a valid email and password has been entered, the user will be brought to the airport main menu page. If the user already has an account, then they will simply log into the system by typing in their email and password. On the main page, the user will be able to search and book a flight, as well as view a list of existing bookings. If the user is an airline agent, they will also be able to record the flight departure time and the flight arrival time. 
 
 	User Guide:
-	1) Start by running the .jar application in the terminal by typing java -jar c291Project1.jar
+	1) navigate /C291_Mini_Project/CMPUT291_MiniProject_1/bin/
+	once here call the command: java -jar c291Project1.jar
+	Start by running the .jar application in the terminal by typing java -jar c291Project1.jar
 	2) Log into the UA Travel application by typing in the letter 'l' and entering you email and password. If you do not have an account, then you can register for one for free by typing in the letter 'r' and entering your email and a 4 character password.
-	3) To view a list of flights, select option 1 in the Airport Main Menu. From here you will want to type in the airport where you will be leaving, the destination airport, and the date of your departure. If you do not know the airport code, type in the name of the airport to get the airport code you need. A list of available flights will be displayed and ordered by price. If you wish to order the result based on the connections, type ********************,
-	4) To book a flight from the list of flights, type ********************, 
+	3) To view a list of flights, select option 1 in the Airport Main Menu. You will first want to type in the airport code of the airport that you will be leaving from. If you do not know the airport code, just type in the name or city of the airport to get a list of airport codes, then type in the airport code of the airport that you want. Then do the same thing for the destination airport. Next, type in the day that you will be departing as DD-MON-YYYY and hit the enter key. Once you have correctly filled in all of the fields, you will be asked a couple of formatting question. For each just type in the character ‘Y’ or ’N’. Finally a list of flights will be displayed for you.
+	4) To book a list of flights, you will first want to complete step three. Once you have done so and a list of flight selections are displayed to you, you will want to type in the selection number of the flights that you wish to board. Once you have selected a flight, type in your name. If this is your first time booking a flight, you will also be asked to type in the name of the country that you are currently living in. Once you have done this, you will be given a ticket number for your flight and your flight will have been booked.
 	5) To cancel a booking that you have made, type in option 2 from the main menu. Next, type in the ticket number to select your booking. After you have selected you booking, type in the letter 'D' and your booking will be canceled.
 	6) To record the departure time of a flight, select option 3 from the main menu. From here type in the flight number of the flight that you want to record, then type in its scheduled departure time and its actual departure time.
 	7) to record the arrival time of a flight, select option 4 from the main menu. Next, type in the flight number of the flight that you wan to record, then type in its actual arrival time.
@@ -29,28 +31,38 @@ Resources:
 	The application is comprised of three main classes:
 	1) UserConsoleInterface.java: The user console interface is the user interface that will be displayed when the user runs the application through the terminal. It handles the user login and registration page by waiting for a user input. When the user logins into the application the class will take in a users email and password and send the information to the sql manager to check to see if the email and password is in the user or airline agents tables. When the user registers, the class will take in a valid email and password a and use the SQLManager to save the users information in the users table.
 
-	2) SQLManager.java: The sql manager handles various sql functionality such as getting sql results and inserting table data. The SQLmanager also initializes the application's data by calling a create, insert and drop tables queries in the Queries class. The class is used by the UserConsoleInterface for registering and logging in users by saving the users data into a table and querying the user table to determine if the user's email and password are in a list of registered users.
+	2) SQLManager.java: The sql manager handles various sql functionality such as getting sql results and inserting table data. The SQLManager also initializes the application's data by calling a create, insert and drop tables queries in the Queries class. The class is used by the UserConsoleInterface for registering and logging in users by saving the users data into a table and querying the user table to determine if the user's email and password are in a list of registered users.
 
-	3) Queries.java: The Queries class is used to create various sql queries o be used by the sql manager. It is used by the sql manager to initialize table data as well as to return the queries used to get results from sql tables. When registering and logging in users, the SQLmanager uses the queries class to create queries that will check to se if the user in in the users tables and to insert valid user data into the users table.
+	3) Queries.java: The Queries class is used to create various sql queries o be used by the sql manager. It is used by the sql manager to initialize table data as well as to return the queries used to get results from sql tables. When registering and logging in users, the SQLManager uses the queries class to create queries that will check to se if the user in in the users tables and to insert valid user data into the users table.
 
 3) Testing Strategy
+	Black Box failure testing was used to test the functionality of the program. Each query is tested independently. Once it is completed it is integrated into the system and tested further to make sure that it works with java. 
 
 4) Group-work Breakdown Strategy
 	
 	Aaron:
-		- Implemented "round trip" functionality: 2 hours to make Querey 
+		- Implemented "round trip" functionality: 2 hours to make Query 
 		- Main editor of documentation: 2 hours
+		- Implemented bookings and queries related to building bookings. 7 hours.
+		- Worked with Quentin to implement the airline attendants. 2 hours.
+		— Helped in running the program in the terminal with a .jar. 1 hour.
 
 	Quentin
 		- Created user interface, run sequence: 4 hour
 		- Created how the program parses the return of Queries: 3 hour
+			I designed the architecture of the software with intention of separation of concerns.
+			We have a “front-end” Console UI called UserConsoleInterface.java. A business logic portion SqlManager.java, which communicates
+			with a JDBC.java file to the SQL server. We also have a static class containing all the queries.
+			After the design I build up a skeleton UI and backend logic but was limited by the requirement of query data.
+			Lots of group work was then done to advance the code into a working model.
+			
 
 	Josh
 
 		- Created majority of Query base: 3 hour
 		- Support, add and check Queries: 0.5 hour
 		- Implemented multiple "connecting flights" functionality: 1 hour
-			.Many Queries were simple to make becuase they were very simple check and fetch Queries.
+			.Many Queries were simple to make because they were very simple check and fetch Queries.
 			.The bigger Queries for main functionality were edited versions of the Assignment two solutions
 	
 	Group
@@ -58,8 +70,8 @@ Resources:
 		- Ironing out bugs : 5 hours
 		- Fixing user interfaces: 5 hours
 			.A majority of time of this project was spent together working on the project as a whole
-			.We each had responsible parts seperately and most time was spent sewing the pieces together
-			.Into something that works well.  The individual pieces were spilit as stated above.  The finished
+			.We each had responsible parts separately and most time was spent sewing the pieces together
+			.Into something that works well.  The individual pieces were split as stated above.  The finished
 			.project is a result of our collective effort.
 			.Our approach was as Quentin built the user interface, Joshua and Aaron would build the support Queries and functions
 			.that Quentin required to make the build function.
