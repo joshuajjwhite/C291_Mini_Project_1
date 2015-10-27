@@ -9,8 +9,7 @@ drop table airline_agents cascade constraints ;
 		  drop table sch_flights cascade constraints;
 		  drop table flights cascade constraints ;
 		  drop table airports cascade constraints ;
-		  drop view good_connections ;
-		  drop view available_flights ;
+
 
 
 create table airports (  
@@ -93,6 +92,26 @@ insert into airports values ('YEG','Edmonton Internatioanl Airport','Edmonton', 
 				 insert into flights values ('AC026','MOS','HOB',to_date('00:15', 'hh24:mi'),200) ;
 				 insert into flights values ('AC027','LAX','YEG',to_date('05:15', 'hh24:mi'),180) ;
 				 insert into flights values ('AC028','HND','YEG',to_date('13:15', 'hh24:mi'),360) ;
+
+/* -------------------------------------------------------------------------------------------------------------*/
+				insert into flights values ('AC029','YEG','HOB',to_date('05:15', 'hh24:mi'),40) ;
+				insert into flights values ('AC030','HOB','YYZ',to_date('10:15', 'hh24:mi'),100) ;
+
+				insert into sch_flights values ('AC029',to_date('22-Dec-2015','DD-Mon-YYYY'),to_date('05:20', 'hh24:mi'),to_date('06:00','hh24:mi')) ;
+				insert into sch_flights values ('AC030',to_date('22-Dec-2015','DD-Mon-YYYY'),to_date('07:40', 'hh24:mi'),to_date('09:20','hh24:mi')) ;
+
+				insert into flight_fares values ('AC029','J',10,2000,2) ;
+				insert into flight_fares values ('AC030','Y',20,700,0) ;
+				insert into flight_fares values ('AC029','Q',10,2000,2) ;
+				insert into flight_fares values ('AC030','F',20,700,0) ;
+
+	 			insert into bookings values (008,'AC029','J',to_date('22-Dec-2015','DD-Mon-YYYY'),'20A') ;
+				insert into bookings values (009,'AC030','F',to_date('22-Dec-2015','DD-Mon-YYYY'),'20B') ;
+				insert into bookings values (010,'AC029','Y',to_date('22-Dec-2015','DD-Mon-YYYY'),'10B') ;
+				
+
+
+/* -------------------------------------------------------------------------------------------------------------*/
 
 				 insert into sch_flights values ('AC154',to_date('22-Sep-2015','DD-Mon-YYYY'),to_date('15:50', 'hh24:mi'),to_date('21:30','hh24:mi')) ;
 				 insert into sch_flights values ('AC154',to_date('23-Sep-2015','DD-Mon-YYYY'),to_date('15:55', 'hh24:mi'),to_date('21:36','hh24:mi')) ;
@@ -211,7 +230,7 @@ insert into airports values ('YEG','Edmonton Internatioanl Airport','Edmonton', 
 
 
 drop view available_flights;
-create view available_flights(flightno, dep_date, src,dst,dep_time, arr_time,fare,seats,
+create view available_flights(flightno, dep_date, src, dst, dep_time, arr_time, fare , seats,
   	price) as 
   select fl.flightno, sf.dep_date, fl.src, fl.dst, fl.dep_time+(trunc(sf.dep_date)-trunc(fl.dep_time)), 
 	 fl.dep_time+(trunc(sf.dep_date)-trunc(fl.dep_time))+(fl.est_dur/60+a2.tzone-a1.tzone)/24, 
@@ -235,7 +254,7 @@ drop view good_connections;
 create view good_connections (src,dst,dep_date,flightno1,flightno2, arr_time, layover,price,seats) as
 	select a1.src, a2.dst, a1.dep_date, a1.flightno, a2.flightno, to_char(a2.arr_time, 'hh24:mi'), a2.dep_time-a1.arr_time, min(a1.price+a2.price), a1.seats || ', ' || a2.seats 
   	from available_flights a1, available_flights a2
-  	where a1.dst=a2.src 
+  	where a1.dst=a2.src and a2.dep_time - a1.arr_time >= 1.5/24 and a2.dep_time - a1.arr_time <= 5/24
   	group by a1.src, a2.dst, a1.dep_date, a2.arr_time, a1.seats, a2.seats, a1.flightno, a2.flightno, a2.dep_time, a1.arr_time ;
 
 
