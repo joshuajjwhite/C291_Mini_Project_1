@@ -1,7 +1,9 @@
 package project1;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -200,73 +202,60 @@ public class UserConsoleInterface {
 	}
 	
 	public String userAcode(){
-		
-		String inputsrc = getInput().trim();
-		//Search for Acode
-		if(sqlManager.searchACODE(inputsrc)){
-			
-			return inputsrc;
-			
-		}
+		boolean loop = true;
+		while(loop){
+			io.printf("Specify \"(Airport Code: XXX or Airport name or City name)\": %n");
+			String inputsrc = getInput().trim();
+			//Search for Acode
+			if(sqlManager.searchACODE(inputsrc)){
+				return inputsrc;
+			}
 	
-		//Search for City
-	
-		ArrayList<String> cities =  sqlManager.searchCity(inputsrc);
-		
-		if(cities.size() == 1){
-		
-			io.printf(cities.get(0) + "%n");
-			return sqlManager.getAcodeByCity(cities.get(0));
-			
-		}
-		else if(cities.size() == 0){
-			io.printf("There were no cities found %n");
-		
-		}
-		else{
-			io.printf("Please clarify which city you meant (type none to not select any city): %n");
-			
-				for(String city: cities){
-					io.printf(city + "%n");
+			//Search for City
+			ArrayList<String> cities =  sqlManager.searchCity(inputsrc);
+			if(cities.size() == 1){
+				io.printf(sqlManager.isThisWhatYouWanted(inputsrc) + "%n Is this the city you were looking for (Y/N)? %n");
+				if (getInput().toLowerCase().equals("y")){
+					return sqlManager.getAcodeByCity(cities.get(0));
+				} else {
+					break;
 				}
+			}
+			else if(cities.size() == 0){
+				io.printf("There were no cities found %n");
+			}
+			else{
+				io.printf("Please clarify which city you meant (type none to not select any city): %n");
+					for(String city: cities){
+						io.printf(sqlManager.isThisWhatYouWanted(city) + "%n");
+					}
+					continue;
+//				String input = getInput().trim();
+//				ArrayList<String> ccities =  sqlManager.searchCity(input);
+//					if(ccities.size() == 1){
+//						return sqlManager.getAcodeByCity(ccities.get(0));}
+//					else{io.printf("There were no cities found %n");}
+			}
 			
-			String input = getInput().trim();
-			ArrayList<String> ccities =  sqlManager.searchCity(input);
-				if(ccities.size() == 1){
-					
-					return sqlManager.getAcodeByCity(ccities.get(0));}
-				else{io.printf("There were no cities found %n");}
-				
+			//Search names
+			ArrayList<String> names =  sqlManager.searchName(inputsrc);
+			if(names.size() == 1){
+				io.printf(names.get(0) + "%n");
+				return sqlManager.getAcodeByName(names.get(0));
+			}
+			else if(cities.size() == 0){
+				io.printf("There were no Airports found %n");
+			}
+			else{
+				io.printf("Please clarify which name you meant (type none to not select any name) %n");
+				String input = getInput().trim();
+				ArrayList<String> cnames =  sqlManager.searchName(input);
+					if(cnames.size() == 1){
+						return sqlManager.getAcodeByName(cnames.get(0));}
+					else{io.printf("There were no Airports found %n");}
+			}
 		}
-		
-		
-		
-		//search names
-		ArrayList<String> names =  sqlManager.searchName(inputsrc);
-		
-		if(names.size() == 1){
-		
-			io.printf(names.get(0) + "%n");
-			return sqlManager.getAcodeByName(names.get(0));
-		
-		}
-		else if(cities.size() == 0){
-			io.printf("There were no Airports found %n");
-		
-		}
-		else{
-			io.printf("Please clarify which name you meant (type none to not select any name) %n");
-			String input = getInput().trim();
-			ArrayList<String> cnames =  sqlManager.searchName(input);
-				if(cnames.size() == 1){
-					
-					return sqlManager.getAcodeByName(cnames.get(0));}
-				else{io.printf("There were no Airports found %n");}
-				
-		}
-		
 		return null;
-	
 }
 	
 	public void searchForFlightMenu(){
@@ -279,75 +268,74 @@ public class UserConsoleInterface {
 			String src = null;
 			String dst = null;
 			String dep_date = null;
+			String ret_date = null;
 			
-			io.printf("Enter Search \"(source)\" %n");
+			io.printf("Enter Flight Source %n");
 			src = userAcode();
-				if(src == null){
-					break;
-				}
-			io.printf("Enter Search \"(destination)\" %n");
+			if(src == null){
+				break;
+			}
+			
+			io.printf("Enter Flight Destination %n");
 			dst = userAcode();
 			if(dst == null){
 				break;
 			}
-				
 			
-			
-			
-			/*io.printf("Enter Search \"(source) (destination) (DD-Mon-YYYY)\" %n"
+			boolean dateSuccess = false;
+			while(!dateSuccess){
+				io.printf("Enter Flight Departure Date (dd-MMM-yyyy ex: 22-Dec-2015) %n");
+				dep_date = getInput();
+				if (Queries.getDate(dep_date) != null){
+					dateSuccess = true;
+				} else {
+					 io.printf("Invalid Date%n %n");
+					 continue;
+				}
+			}
 
-			io.printf("Enter Search \"(Source) (Destination) (Departure Date DD-Mon-YYYY)\" %n"
-
-					 + "B. Back %n"
-					 + "L. Logout %n"); */
 			
-			/*	
-			
-			
-			String input = getInput().trim();
-			switch (input){
-				case "b":
-					 loop = false;
-					 break;
-				case "l":
-					 logout();
-					 break;
-				 default:
-					 
-					 // Search Logic
-					 boolean successfulInput = true;
-					 String[] splited = input.split("\\s+");
-					 if ( splited.length == 3 ){
-						 String src = splited[0].trim();
-						 String dst = splited[1].trim();
-						 String dep_date = splited[2].trim();
-						 
-						 if (Queries.getDate(dep_date) != null){
-							 HashMap<Integer, HashMap<String, String>> flightList = sqlManager.searchFlights(src, dst, dep_date);
-							 if (flightList != null){
-								 displayFlights(flightList);
-							 } else {
-								 successfulInput = false;
-								 io.printf("No flights returned with given src and dst %n %n");
-								 break; 
-							 }
-						 } else {
-							 successfulInput = false;
-							 io.printf("Invalid Date%n %n");
-							 break;
-						 }
-						 
-					 } else {
-						 successfulInput = false;
-						 io.printf("Invalid Input, three arguments should be provided %n %n");
-						 break;
-
-					 } 
-					 */
-
-				
+			io.printf("Are you looking for round trip? (Y/N) %n");
+			if (getInput().toLowerCase().equals("y")){
+				dateSuccess = false;
+				while(!dateSuccess){
+					io.printf("Enter Flight Return Date (dd-MMM-yyyy ex: 22-Dec-2015) %n");
+					ret_date = getInput();
+					if (Queries.getDate(dep_date) != null){
+						dateSuccess = true;
+					} else {
+						 io.printf("Invalid Date%n %n");
+						 continue;
+					}
+				}
+				 HashMap<Integer, HashMap<String, String>> flightList = sqlManager.searchFlights(src, dst, dep_date, true, ret_date, false, false);
+				 if (flightList != null){
+					 displayFlights(flightList);
+				 } else {
+					 io.printf("No Round trip flights travel from given src and dst on specified date %n %n");
+					 break; 
+				 }
+			} else {
+				boolean threeConn = false;
+				boolean sortConn = false;
+				io.printf("Are you okay with three connecting flights? (Y/N) %n");
+				if (getInput().toLowerCase().equals("Y")){
+					threeConn = true;
+				} 
+				io.printf("Would you like to sort by stops? (Y/N) %n");
+				if (getInput().toLowerCase().equals("Y")){
+					sortConn = true;
+				}
+				HashMap<Integer, HashMap<String, String>> flightList = sqlManager.searchFlights(src, dst, dep_date, false, null, threeConn, sortConn);
+				if (flightList != null){
+					 displayFlights(flightList);
+				} else {
+					io.printf("No flights travel from given src to dst on specified date %n %n");
+					break; 
+				 }
 			}
 		}
+	}
 		
 
 					 
@@ -411,12 +399,69 @@ public class UserConsoleInterface {
 		io.printf("Booking A Flight %n");
 		io.printf("####################%n");
 		io.printf("Please provide your name %n");
+		
 		String userName = getInput();
 		
+		//If the passenger has not been entered before, this will add them.
+		if (!sqlManager.checkPassengers(this.getCurrentUserEmail(), userName)) {
+			io.printf("%nYou are not registered in the passengers list. %n");
+			io.printf("Please provide the country that you are currently living in. %n");
+			
+			String country = getInput();
+			sqlManager.addPassenger(this.getCurrentUserEmail(), userName, country);
+		}
+		
+		//Give them a ticket and add a booking.
+		Integer ticketNumber = 0;
+		Integer seatNumber = 0;
+		String seatString = "";
+		String flightNo = "";
+		Boolean validTicketNumber = false;
+		Boolean validSeatNumber = false;
+		Random randomGenerator = new Random();
+		
+		for (int i = 1; i <= 3; i++) {
+			if(flight.containsKey("FLIGHTNO" + Integer.toString(i)) && flight.get("FLIGHTNO"  + Integer.toString(i))!="null") {
+				while (!validTicketNumber) {
+					ticketNumber = randomGenerator.nextInt(2147483647);
+					if(!sqlManager.checkTicket(ticketNumber)) { validTicketNumber = true; }
+				}
+				
+				while (!validSeatNumber) {
+					seatNumber = randomGenerator.nextInt(99);
+					seatString = seatNumber.toString() +'A';
+					if(!sqlManager.checkSeat(seatString)) { 
+						validSeatNumber = true; 
+					}
+					else {
+						seatString = seatNumber.toString() +'B';
+						if(!sqlManager.checkSeat(seatString)) { 
+							validSeatNumber = true; 
+						}
+					}
+					
+				}
+				
+				//Insert ticket and booking
+				flightNo = flight.get("FLIGHTNO"  + Integer.toString(i));
+				sqlManager.addTicket(ticketNumber, userName, this.getCurrentUserEmail(), flight.get("PRICE"));
+				try {
+					sqlManager.addBooking(ticketNumber, flightNo, sqlManager.getFareType(flightNo), flight.get("DEP_DATE"), seatString);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				//Print ticket info:
+				io.printf("Your ticket number for flight %s is: %d. %n", flightNo, ticketNumber);
+			}
+		}
 	}
 	
 	public void listBookings(){
 		io.printf("List Bookings %n");
+		
+		HashMap<String, String> ticket;
 		
 		boolean loop = true;
 		while(loop) {
@@ -425,12 +470,27 @@ public class UserConsoleInterface {
 			io.printf("############### %n");
 			
 			//content
-			HashMap<String, String> bookings = sqlManager.getBookings(getCurrentUserEmail());
-			for(Entry<String, String> entry: bookings.entrySet()){
-				io.printf(entry.getValue() + "%n");
+			HashMap<Integer, HashMap<String, String>> bookings = sqlManager.getBookings(getCurrentUserEmail());
+			if (bookings != null){
+				for(int i=1;i<=bookings.size();i++){
+					ticket = bookings.get(i);
+					
+					//the ticket number, the passenger name, the departure date and the price.
+					io.printf("Ticket Selection %d: %n", i);
+					io.printf("---------------------- %n");
+					io.printf("Ticket Number - %s %n", ticket.get("TNO"));
+					io.printf("Passenger - %s %n", ticket.get("NAME"));
+					io.printf("Departure Time - %s %n", ticket.get("DEP_DATE"));
+					io.printf("Price - %s %n", ticket.get("PRICE"));
+	
+					
+					io.printf("%n %n");
+				}
+			} else {
+				io.printf("Issue Getting Bookings");
 			}
 			
-			io.printf("%n%nType \"(tno)\" to select Booking %n"
+			io.printf("%n%nType Ticket Selection Number to select Booking %n"
 					 + "B. Back %n"
 					 + "L. Logout %n");
 			 
@@ -444,8 +504,7 @@ public class UserConsoleInterface {
 					 break;
 				 default:
 					if ( bookings.containsKey(input) ) {
-					 String value = bookings.get(input);
-					 selectBooking(input, value);
+					 selectBooking(bookings.get(Integer.valueOf(input)));
 					} else {
 					 io.printf("Invalid Input %n %n");
 					 break;
@@ -454,12 +513,20 @@ public class UserConsoleInterface {
 		}
 	}
 	
-	public void selectBooking(String key, String value){
+	public void selectBooking(HashMap<String, String> ticket){
+		//TNO 2 FLIGHTNO AC027  FARE J  DEP_DATE 2015-10-23 00:00:00.0 SEAT 10A Ticket 
 		boolean loop = true;
 		while(loop){
-			io.printf("Selected Booking with tno %s%n", key);
+			io.printf("Selected Booking with tno %s%n", ticket.get("TNO"));
 			io.printf("###############################%n");
-			io.printf("Info: %s%n", value);
+
+			io.printf("---------------------- %n");
+			io.printf("Ticket Number - %s %n", ticket.get("TNO"));
+			io.printf("Passenger - %s %n", ticket.get("NAME"));
+			io.printf("Departure Time - %s %n", ticket.get("DEP_DATE"));
+			io.printf("Price - %s %n", ticket.get("PRICE"));
+			
+			
 			
 			io.printf("Type \"D\" to delete Booking %n"
 					 + "B. Back %n"
@@ -468,7 +535,7 @@ public class UserConsoleInterface {
 			String input = getInput().trim().toLowerCase();
 			switch (input){
 				case "d":
-					cancleBooking(key);
+					cancleBooking(ticket.get("TNO"));
 					loop = false;
 					break;
 				case "b":

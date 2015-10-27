@@ -35,31 +35,24 @@ public class SqlManager {
 		this.insertData();
 	}
 	
-	public HashMap<Integer, HashMap<String, String>> searchFlights(String src, String dst, String dep_date){
+	public HashMap<Integer, HashMap<String, String>> searchFlights(String src, String dst, String dep_date, boolean roundTrip, String ret_date, boolean threeConn, boolean orderByConn){
 		// good_connections(src,dst,dep_date,flightno1,flightno2, layover,price)
 		//available_flights(flightno, dep_date, src , dst, dep_time, arr_time, fare, seats,price)
-		//io.printf("%d %n", src.length());
-		//io.printf("%d %n", dst.length());
-		
-		//io.printf("%s %n", src);
-		//io.printf("%s %n", dst);
-		//io.printf("%s %n", dep_date);
+
 		HashMap<Integer, HashMap<String, String>> flights = new HashMap<Integer, HashMap<String, String>>();
 		HashMap<String, String> flight = new HashMap<String, String>();
-		String[] stmts = Queries.searchFlight(src.toUpperCase(), dst.toUpperCase(), dep_date, false, false);
-		String flightNo = "Oops";
-		String sourceAcode = "Oops";
-		String dstAcode = "Oops";
-		String dep_time = "Oops";
-		String arr_time = "Oops";
-		String numStops = "Oops";
-		String price = "Oops";
-		String seats = "Oops";
-		Integer flightCounter = 0 ;
 		
-		//heres the error (--Joshua)
+//		String roundTrip(String src, String dst, String dep_date, String ret_date)
+		
+		String[] stmts = null;
+		if(roundTrip){
+			stmts = Queries.roundTrip(src.toUpperCase(), dst.toUpperCase(), dep_date, ret_date);
+		} else {
+			stmts = Queries.searchFlight(src.toUpperCase(), dst.toUpperCase(), dep_date, threeConn, orderByConn);
+		}
+		
+		Integer flightCounter = 0 ;
 		ResultSet rs = null;
-//		for (String stmt: stmts[0:stmts.length-1]){
 		for (int i = 0; i < stmts.length-1; i++){
 			rs = sqlDB.executeQuery(stmts[i]);
 		}
@@ -94,37 +87,49 @@ public class SqlManager {
 	}
 	
 	
-	public HashMap<String, String> getBookings(String email){
+	public HashMap<Integer, HashMap<String, String>> getBookings(String email){
 		String tno;
 		String dep_date;
-		String name = "";
 		String price = "";
+		Integer ticketCounter = 0;
 		
 		ResultSet rs = sqlDB.executeQuery(Queries.getUserBookings(email));
-		HashMap<String, String> bookings = new HashMap<String, String>();
+		HashMap<Integer, HashMap<String, String>> tickets = new HashMap<Integer, HashMap<String, String>>();
+		HashMap<String, String> ticketInfo = new HashMap<String, String>();
 		try{
 			while(rs.next()){
 				tno = String.valueOf(rs.getInt("tno"));
 				dep_date = String.valueOf(rs.getString("dep_date"));
 				
 				ResultSet rs_tickets = sqlDB.executeQuery(Queries.checkTicket(tno));
-				while(rs_tickets.next()){
-					name = String.valueOf(rs_tickets.getString("name")).trim();
-					price = String.valueOf(rs_tickets.getFloat("paid_price"));
+			    ticketCounter ++;
+				while (rs_tickets.next()){
 					
+					ResultSetMetaData rsetMD = rs.getMetaData();
+				    int columnCount = rsetMD.getColumnCount();
+
+
+		      		for (int c=1; c<=columnCount; c++){
+						String name = rsetMD.getColumnLabel(c); // get column name
+						Object o = rs.getObject(c); // get content at that index
+						String value="null";
+						if (o!=null) {
+							value = o.toString();
+		     		 	}
+						
+						io.printf("%s %s ", name, value);
+						
+						ticketInfo.put(name, value);
+		      		}
+	
+
 				}
-				String s = "tno: " + tno + ", passenger: " + name + ", departure date: " + dep_date +
-						", price: " + price;
-				bookings.put(tno, s);
-//				io.printf("tno: %s, passenger: %s, departure date: %s, price: %s ", tno, name, dep_date, price);
-				
-				
-				//+ " " + rs.getString("fare") + String.valueOf(rs.getDate("dep_date")) + " " + rs.getString("seat");
+	      		tickets.put(ticketCounter, ticketInfo);
 			}
-			return bookings;
+			return tickets;
 		} catch (Exception e){
 			io.printf("Issue getting bookings %n", e);
-			return bookings;
+			return null;
 		}
 	}
 	
@@ -162,7 +167,6 @@ public class SqlManager {
 		}
 		return password;
 	}
-	
 	
 	public void logoutUser(String email){
 		sqlDB.sendCommand(Queries.updateLastLogin(email));
@@ -256,11 +260,11 @@ public class SqlManager {
 				
 				try {
 					ar.add(rs.getString("CITY"));
+
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-				}
-				
+				}	
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -270,8 +274,6 @@ public class SqlManager {
 		
 		
 		return ar;
-		
-		
 	}
 	
 	public ArrayList<String> searchName(String s){
@@ -279,36 +281,50 @@ public class SqlManager {
 		ArrayList<String> ar = new ArrayList<String>();
 		try {
 			while(rs.next()){
-				
 				try {
 					ar.add(rs.getString("NAME"));
+
 
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
-		
 		return ar;
-		
-		
+	}
+	
+	public String isThisWhatYouWanted(String s){
+		ResultSet rs = sqlDB.executeQuery(Queries.searchCities(s));
+		ArrayList<String> ar = new ArrayList<String>();
+		try {
+			while(rs.next()){
+				try {
+					return rs.getString("CITY") + " - " + rs.getString("NAME");
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
 	}
 	
 	public String getAcodeByCity(String city){
 		
 		ResultSet rs = sqlDB.executeQuery(Queries.searchAcodeByCity(city));
 		try {
+			rs.next();
 			return rs.getString("ACODE");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			io.printf("Error getting AcodeByCity %s", e);
+//			e.printStackTrace();
 		}
 		
 		return null;
@@ -339,5 +355,62 @@ public class SqlManager {
 	
 	public void updateArrival(String flightNum, String dep_time, String act_arr_time){
 		sqlDB.sendCommand(Queries.recordArrival(flightNum.toUpperCase(), Queries.getDate(dep_time), act_arr_time));
+	}
+	
+	public boolean checkPassengers(String email, String name) {
+		ResultSet rs = sqlDB.executeQuery(Queries.checkPassengers(email, name));
+		try{
+			if(!rs.isBeforeFirst()){
+				return false;
+			}
+		} catch (Exception e){
+			io.printf("checkPassengers failed %s", e);
+		}
+		return true; 
+	}
+	
+	public boolean checkTicket(Integer tno) {
+		ResultSet rs = sqlDB.executeQuery(Queries.checkTicket(tno.toString()));
+		try{
+			if(!rs.isBeforeFirst()){
+				return false;
+			}
+		} catch (Exception e){
+			io.printf("checkTicket failed %s", e);
+		}
+		return true; 
+	}
+	
+	public boolean checkSeat(String seat) {
+		ResultSet rs = sqlDB.executeQuery(Queries.checkSeat(seat));
+		try{
+			if(!rs.isBeforeFirst()){
+				return false;
+			}
+		} catch (Exception e){
+			io.printf("checkTicket failed %s", e);
+		}
+		return true; 
+	}
+	
+	public void addPassenger(String email, String name, String country) {
+		sqlDB.sendCommand(Queries.addPassenger(email, name, country));
+	}
+	
+	public void addTicket(Integer ticketNumber,String name,String email,String paid_price) {
+		sqlDB.sendCommand(Queries.addTicket(ticketNumber.toString(), name, email, paid_price));
+	}
+	
+	public void addBooking(Integer ticketNumber, String flightno, String fare, String dep_date, String seat) {
+		sqlDB.sendCommand(Queries.addBooking(ticketNumber.toString(), flightno, fare, dep_date, seat));
+	}
+	
+	public String getFareType(String flightNo) throws SQLException {
+		ResultSet rs = sqlDB.executeQuery(Queries.getFare(flightNo));
+		Object o = rs.getObject(0);
+		if (o!=null) {
+			return o.toString();
+		}
+		return "";
 	}
 }
