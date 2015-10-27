@@ -367,7 +367,7 @@ public class Queries {
  				 "a1.src, a2.dst, a1.dep_date, a1.flightno, a2.flightno, to_char(a2.arr_time, 'hh24:mi'), " + 
  				 "a2.dep_time-a1.arr_time, min(a1.price+a2.price), a1.seats || ', ' || a2.seats " +
  				 "from available_flights a1, available_flights a2 " +
- 				 "where a1.dst=a2.src " +
+ 				 "where a1.dst=a2.src and a2.dep_time - a1.arr_time >= 1.5/24 and a2.dep_time - a1.arr_time <= 5/24 " +
  				 "group by a1.src, a2.dst, a1.dep_date, a2.arr_time, a1.seats, a2.seats, a1.flightno, a2.flightno, a2.dep_time, a1.arr_time "};
 		 
 		 return gc;
@@ -385,7 +385,7 @@ public class Queries {
 
  				 "from available_flights a1, available_flights a2, availableflights a3 " +
 
- 				 "where a1.dst=a2.src and a2.dst = a3.src " +
+ 				 "where a1.dst=a2.src and a2.dst = a3.src and a2.dep_time - a1.arr_time >= 1.5/24 and a2.dep_time - a1.arr_time <= 5/24 and a3.dep_time - a2.arr_time >= 1.5/24 and a3.dep_time - a2.arr_time <= 5/24 " +
 
  				 "group by a1.src, a3.dst, a1.dep_date, a3.arr_time, a1.seats, a2.seats, a3.seats, a1.flightno, a2.flightno, a3.flightno, a3.dep_time, a2.arr_time, a2.dep_time, a1.arr_time "};
 		 
