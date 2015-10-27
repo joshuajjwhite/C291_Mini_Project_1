@@ -377,7 +377,7 @@ public class UserConsoleInterface {
 			io.printf("Record a Departure %n");
 			io.printf("###############################%n");
 			
-			io.printf("Type \"(FlightNum) (Scheduled Departure Date dd-MMM-yyyy) \" to Record a Departure %n"
+			io.printf("Type \"(FlightNum) (Scheduled Departure Date DD-MON-YYYY) \" to Record a Departure %n"
 					 + "B. Back %n"
 					 + "L. Logout %n");
 			 
@@ -389,11 +389,11 @@ public class UserConsoleInterface {
 				case "l":
 					 logout();
 					 break;
-				 default:
-					 //do work
-					 boolean successfulInput = true;
-					 String[] splited = input.split("\\s+");
-					 if (splited.length == 2 ){
+				default:
+					//do work
+					boolean successfulInput = true;
+					String[] splited = input.split("\\s+");
+					if (splited.length == 2 ){
 						 String act_dep_time = null;
 						 if (splited.length == 3){
 							 act_dep_time = splited[2];
@@ -416,7 +416,7 @@ public class UserConsoleInterface {
 						 
 					 } else {
 						 successfulInput = false;
-						 io.printf("Invalid Input, three arguments should be provided %n %n");
+						 io.printf("Invalid Input, three arguments should not be provided %n %n");
 						 break;
 					 }
 					 io.printf("Invalid Input");
